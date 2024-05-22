@@ -1,11 +1,11 @@
-from flask import Flask, render_template, request, flash, redirect, url_for
+from flask import render_template, request, flash, redirect, url_for, Blueprint
 from werkzeug.security import generate_password_hash
 
 
-app = Flask(__name__)
-app.config["SECRET_KEY"] = "sjdFODJdsojfsodfjPFJdjs546sdfsoidfjPfj"
+users = Blueprint("users", __name__)
 
-@app.route('/register', methods=['GET', 'POST'])
+
+@users.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form['username']
@@ -28,7 +28,7 @@ def register():
         return redirect(url_for('login'))
     return render_template('auth_register.html')
 
-@app.route('/login', methods=['GET', 'POST'])
+@users.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
@@ -42,7 +42,3 @@ def login():
         # else:
         #     flash('Invalid username or password')
     return render_template('auth_login.html')
-
-
-if __name__ == "__main__":
-    app.run(debug=True)

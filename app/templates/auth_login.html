@@ -7,29 +7,12 @@
     <div class="col-md-6">
         <h2 class="mt-5">Login</h2>
 
-        {% with messages = get_flashed_messages(('info', 'warning', 'error')) %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                {% for message in messages %}
-                    {% if message[0] == "success" %}
-                    <p style="color: green;">
-                        {{ message[1] }}
-                    </p>
-                    {% endif %}
-                    {% if message[0] == "info" %}
-                    <p style="color: blue;">
-                        {{ message[1] }}
-                    </p>
-                    {% endif %}
-                    {% if message[0] == "warning" %}
-                    <p style="color: yellow;">
-                        {{ message[1] }}
-                    </p>
-                    {% endif %}
-                    {% if message[0] == "error" %}
-                    <p style="color: red;">
-                        {{ message[1] }}
-                    </p>
-                    {% endif %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
                 {% endfor %}
             {% endif %}
         {% endwith %}
