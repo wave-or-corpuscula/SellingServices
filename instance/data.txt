@@ -1,0 +1,87 @@
+-- Заполнение таблицы Posts
+INSERT INTO Posts (post_name) VALUES 
+('Manager'),
+('Technician'),
+('Supervisor'),
+('Coordinator'),
+('Assistant');
+
+-- Заполнение таблицы Clients
+INSERT INTO Clients (full_name, address, telephone, login, password) VALUES 
+('John Doe', '123 Elm St', '555-1234', 'john_doe', 'password1'),
+('Jane Smith', '456 Oak St', '555-5678', 'jane_smith', 'password2'),
+('Mike Johnson', '789 Pine St', '555-8765', 'mike_j', 'password3'),
+('Emily Davis', '101 Maple St', '555-4321', 'emily_d', 'password4'),
+('David Brown', '202 Birch St', '555-1111', 'david_b', 'password5');
+
+-- Заполнение таблицы Employees
+INSERT INTO Employees (post_id, full_name, telephone, login, password) VALUES 
+(1, 'Alice Johnson', '555-2222', 'alice_j', 'password6'),
+(2, 'Bob Brown', '555-3333', 'bob_b', 'password7'),
+(3, 'Carol White', '555-4444', 'carol_w', 'password8'),
+(4, 'David Green', '555-5555', 'david_g', 'password9'),
+(5, 'Eve Black', '555-6666', 'eve_b', 'password10');
+
+-- Заполнение таблицы TypesOfService
+INSERT INTO TypesOfService (service_type_name) VALUES 
+('Cleaning'),
+('Maintenance'),
+('Repair'),
+('Installation'),
+('Consulting');
+
+-- Заполнение таблицы Purveyors
+INSERT INTO Purveyors (contact_info) VALUES 
+('purveyor1@example.com'),
+('purveyor2@example.com'),
+('purveyor3@example.com'),
+('purveyor4@example.com'),
+('purveyor5@example.com');
+
+-- Заполнение таблицы StoreHouse
+INSERT INTO StoreHouse (typeofservice_id, purveyor_id, count) VALUES 
+(1, 1, 100),
+(2, 2, 200),
+(3, 3, 150),
+(4, 4, 180),
+(5, 5, 220);
+
+-- Заполнение таблицы Services
+INSERT INTO Services (typeofservice_id, service_name) VALUES 
+(1, 'Window Cleaning'),
+(2, 'AC Maintenance'),
+(3, 'Plumbing Repair'),
+(4, 'Equipment Installation'),
+(5, 'Business Consulting');
+
+-- Заполнение таблицы Orders
+INSERT INTO Orders (client_id, service_id, order_date) VALUES 
+(1, 1, '2024-05-01'),
+(2, 2, '2024-05-02'),
+(3, 3, '2024-05-03'),
+(4, 4, '2024-05-04'),
+(5, 5, '2024-05-05');
+
+-- Заполнение таблицы Delivery
+INSERT INTO Delivery (order_id, delivery_date) VALUES 
+(1, '2024-05-06'),
+(2, '2024-05-07'),
+(3, '2024-05-08'),
+(4, '2024-05-09'),
+(5, '2024-05-10');
+
+-- Заполнение таблицы OrdersStatuses
+INSERT INTO OrdersStatuses (delivery_id, status_name) VALUES 
+(1, 'Pending'),
+(2, 'Completed'),
+(3, 'In Progress'),
+(4, 'Shipped'),
+(5, 'Cancelled');
+
+-- Заполнение таблицы GeneratedOrder
+INSERT INTO GeneratedOrder (order_id, client_id, employee_id, service_id, count, price) VALUES 
+(1, 1, 1, 1, 2, 150),
+(2, 2, 2, 2, 1, 300),
+(3, 3, 3, 3, 3, 450),
+(4, 4, 4, 4, 4, 600),
+(5, 5, 5, 5, 5, 750);

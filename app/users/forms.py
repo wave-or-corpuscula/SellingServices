@@ -9,12 +9,12 @@ class RegistrationForm(FlaskForm):
     phone = StringField('Phone', validators=[DataRequired()]) # TODO: Make phone validation
     address = StringField('Address', validators=[DataRequired()])
     username = StringField('Username', validators=[DataRequired()])
-    password = StringField('Password', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField("Submit")
 
 
 class LoginForm(FlaskForm):
 
     username = StringField('Username', validators=[DataRequired()])
-    password = StringField('Password', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField("Submit")
