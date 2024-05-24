@@ -1,0 +1,20 @@
+{% extends "dashboard_base.html" %}
+
+{% block title %}Client Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Client Dashboard</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <a href="{{ url_for('clients.new_order') }}" class="btn btn-primary btn-block mb-3">Create New Order</a>
+        </div>
+        <div class="col-md-4">
+            <a href="{{ url_for('clients.view_orders') }}" class="btn btn-primary btn-block mb-3">View Orders</a>
+        </div>
+        <div class="col-md-4">
+            <a href="{{ url_for('clients.view_requests') }}" class="btn btn-primary btn-block mb-3">View Requests</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

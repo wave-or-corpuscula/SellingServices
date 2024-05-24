@@ -22,7 +22,7 @@ def register():
         password = form.password.data
         username = form.username.data
 
-        # TODO: Сделать проверку, есть ли уже такой пользователь, и если есть, то выдать flash об ошибке
+        # Проверка на существующего пользователя
         existing_user = Clients.query.filter((Clients.login == username) | (Clients.telephone == telephone)).first()
         existing_employee = Employees.query.filter((Employees.login == username) | (Employees.telephone == telephone)).first()
         if existing_user or existing_employee:
@@ -62,22 +62,21 @@ def login():
             flash('Login unsuccessful. Please check username and password', 'danger')
     return render_template('auth_login.html', form=form)
 
+@users.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('users.login'))
+
 @users.route('/client_dashboard')
 def client_dashboard():
     if session.get('role') != 'client':
         return redirect(url_for('users.login'))
-    return render_template('client_dashboard.html')
+    return render_template('dashboard_client.html')
 
 @users.route('/employee_dashboard')
 def employee_dashboard():
     if session.get('role') == 'employee':
-        return render_template('employee_dashboard.html')
+        return render_template('dashboard_employee.html')
     elif session.get('role') == 'admin':
-        return render_template('admin_dashboard.html')
+        return render_template('dashboard_admin.html')
     return redirect(url_for('users.login'))
-
-@users.route('/admin_dashboard')
-def admin_dashboard():
-    if session.get('role') != 'admin':
-        return redirect(url_for('users.login'))
-    return render_template('admin_dashboard.html')

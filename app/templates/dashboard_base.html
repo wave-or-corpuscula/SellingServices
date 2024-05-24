@@ -9,7 +9,7 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{{ url_for('index') }}">My Application</a>
+        <a class="navbar-brand" href="{{ url_for('users.home') }}">My Application</a>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 {% if session.get('role') == 'client' %}
@@ -22,7 +22,7 @@
                 </li>
                 {% endif %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('users.logout') }}">Logout</a>
+                    <a class="nav-link" href="{{ url_for('users.login') }}">Logout</a>
                 </li>
             </ul>
         </div>

@@ -1,0 +1,27 @@
+{% extends "dashboard_base.html" %}
+
+{% block title %}View Orders{% endblock %}
+
+{% block content %}
+<h2 class="my-4">Ваши заказы</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Услуга</th>
+            <th scope="col">Дата заказа</th>
+            <th scope="col">Статус</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <th scope="row">{{ order.id }}</th>
+            <td>{{ order.service.service_name }}</td>
+            <td>{{ order.order_date }}</td>
+            <td>{{ order.status.status_name }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

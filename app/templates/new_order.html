@@ -1,0 +1,20 @@
+{% extends "dashboard_base.html" %}
+
+{% block title %}New Order{% endblock %}
+
+{% block content %}
+<h2 class="my-4">Оформить новый заказ</h2>
+<form method="POST" action="{{ url_for('clients.create_order') }}">
+    <div class="form-group">
+        <label for="service">Выберите услугу:</label>
+        <select class="form-control" id="service" name="service">
+            {% for service in services %}
+            <option value="{{ service.id }}">{{ service.service_name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Оформить заказ</button>
+    </div>
+</form>
+{% endblock %}

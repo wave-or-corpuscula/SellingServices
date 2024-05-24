@@ -13,6 +13,8 @@ def create_app(config=Config):
     db.init_app(app)
     
     from app.users.routes import users
+    from app.clients.routs import clients
     app.register_blueprint(users)
+    app.register_blueprint(clients)
 
     return app

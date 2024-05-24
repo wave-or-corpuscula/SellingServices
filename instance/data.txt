@@ -1,87 +1,79 @@
--- Заполнение таблицы Posts
-INSERT INTO Posts (post_name) VALUES 
+-- Inserting data into Clients table
+INSERT INTO Clients (full_name, address, telephone, login, password) VALUES
+('John Doe', '123 Elm St', '123-456-7890', 'johndoe', 'password1'),
+('Jane Smith', '456 Oak St', '234-567-8901', 'janesmith', 'password2'),
+('Alice Johnson', '789 Pine St', '345-678-9012', 'alicejohnson', 'password3'),
+('Bob Brown', '101 Maple St', '456-789-0123', 'bobbrown', 'password4'),
+('Charlie Davis', '202 Birch St', '567-890-1234', 'charliedavis', 'password5');
+
+-- Inserting data into Posts table
+INSERT INTO Posts (post_name) VALUES
 ('Manager'),
 ('Technician'),
+('Clerk'),
 ('Supervisor'),
-('Coordinator'),
-('Assistant');
+('Administrator');
 
--- Заполнение таблицы Clients
-INSERT INTO Clients (full_name, address, telephone, login, password) VALUES 
-('John Doe', '123 Elm St', '555-1234', 'john_doe', 'password1'),
-('Jane Smith', '456 Oak St', '555-5678', 'jane_smith', 'password2'),
-('Mike Johnson', '789 Pine St', '555-8765', 'mike_j', 'password3'),
-('Emily Davis', '101 Maple St', '555-4321', 'emily_d', 'password4'),
-('David Brown', '202 Birch St', '555-1111', 'david_b', 'password5');
+-- Inserting data into Employees table
+INSERT INTO Employees (post_id, full_name, telephone, login, password, is_admin) VALUES
+(1, 'Michael Scott', '987-654-3210', 'mscott', 'password6', FALSE),
+(2, 'Dwight Schrute', '876-543-2109', 'dschrute', 'password7', FALSE),
+(3, 'Pam Beesly', '765-432-1098', 'pbeesly', 'password8', FALSE),
+(4, 'Jim Halpert', '654-321-0987', 'jhalpert', 'password9', FALSE),
+(5, 'Angela Martin', '543-210-9876', 'amartin', 'password10', TRUE);
 
--- Заполнение таблицы Employees
-INSERT INTO Employees (post_id, full_name, telephone, login, password, is_admin) VALUES 
-(1, 'Alice Johnson', '555-2222', 'alice_j', 'password6', false),
-(2, 'Bob Brown', '555-3333', 'bob_b', 'password7', false),
-(3, 'Carol White', '555-4444', 'carol_w', 'password8', false),
-(4, 'David Green', '555-5555', 'david_g', 'password9', false),
-(5, 'Eve Black', '555-6666', 'eve_b', 'password10', true);
+-- Inserting data into ServiceObjects table
+INSERT INTO ServiceObjects (object_name) VALUES
+('Object A'),
+('Object B'),
+('Object C'),
+('Object D'),
+('Object E');
 
--- Заполнение таблицы TypesOfService
-INSERT INTO TypesOfService (service_type_name) VALUES 
-('Cleaning'),
-('Maintenance'),
-('Repair'),
-('Installation'),
-('Consulting');
+-- Inserting data into StoreHouse table
+INSERT INTO StoreHouse (object_id, count) VALUES
+(1, 100),
+(2, 200),
+(3, 150),
+(4, 250),
+(5, 300);
 
--- Заполнение таблицы Purveyors
-INSERT INTO Purveyors (contact_info) VALUES 
-('purveyor1@example.com'),
-('purveyor2@example.com'),
-('purveyor3@example.com'),
-('purveyor4@example.com'),
-('purveyor5@example.com');
+-- Inserting data into Services table
+INSERT INTO Services (service_name) VALUES
+('Service 1'),
+('Service 2'),
+('Service 3'),
+('Service 4'),
+('Service 5');
 
--- Заполнение таблицы StoreHouse
-INSERT INTO StoreHouse (typeofservice_id, purveyor_id, count) VALUES 
-(1, 1, 100),
-(2, 2, 200),
-(3, 3, 150),
-(4, 4, 180),
-(5, 5, 220);
+-- Inserting data into OrderRequest table
+INSERT INTO OrderRequest (client_id, service_id, order_date) VALUES
+(1, 1, '2024-05-20'),
+(2, 2, '2024-05-21'),
+(3, 3, '2024-05-22'),
+(4, 4, '2024-05-23'),
+(5, 5, '2024-05-24');
 
--- Заполнение таблицы Services
-INSERT INTO Services (typeofservice_id, service_name) VALUES 
-(1, 'Window Cleaning'),
-(2, 'AC Maintenance'),
-(3, 'Plumbing Repair'),
-(4, 'Equipment Installation'),
-(5, 'Business Consulting');
+-- Inserting data into OrdersStatuses table
+INSERT INTO OrdersStatuses (status_name) VALUES
+('Pending'),
+('In Progress'),
+('Completed'),
+('Cancelled'),
+('On Hold');
 
--- Заполнение таблицы Orders
-INSERT INTO Orders (client_id, service_id, order_date) VALUES 
-(1, 1, '2024-05-01'),
-(2, 2, '2024-05-02'),
-(3, 3, '2024-05-03'),
-(4, 4, '2024-05-04'),
-(5, 5, '2024-05-05');
+-- Inserting data into Orders table
+INSERT INTO Orders (client_id, employee_id, service_id, status, service_object_id, order_date, count, price) VALUES
+(1, 1, 1, 1, 1, '2024-05-20', 10, 100),
+(2, 2, 2, 2, 2, '2024-05-21', 20, 200),
+(3, 3, 3, 3, 3, '2024-05-22', 30, 300),
+(4, 4, 4, 4, 4, '2024-05-23', 40, 400),
+(5, 5, 5, 5, 5, '2024-05-24', 50, 500);
 
--- Заполнение таблицы Delivery
-INSERT INTO Delivery (order_id, delivery_date) VALUES 
-(1, '2024-05-06'),
-(2, '2024-05-07'),
-(3, '2024-05-08'),
-(4, '2024-05-09'),
-(5, '2024-05-10');
-
--- Заполнение таблицы OrdersStatuses
-INSERT INTO OrdersStatuses (delivery_id, status_name) VALUES 
-(1, 'Pending'),
-(2, 'Completed'),
-(3, 'In Progress'),
-(4, 'Shipped'),
-(5, 'Cancelled');
-
--- Заполнение таблицы GeneratedOrder
-INSERT INTO GeneratedOrder (order_id, client_id, employee_id, service_id, count, price) VALUES 
-(1, 1, 1, 1, 2, 150),
-(2, 2, 2, 2, 1, 300),
-(3, 3, 3, 3, 3, 450),
-(4, 4, 4, 4, 4, 600),
-(5, 5, 5, 5, 5, 750);
+-- Inserting data into Delivery table
+INSERT INTO Delivery (order_id, delivery_date) VALUES
+(1, '2024-06-01'),
+(2, '2024-06-02'),
+(3, '2024-06-03'),
+(4, '2024-06-04'),
+(5, '2024-06-05');
