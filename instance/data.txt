@@ -15,12 +15,12 @@ INSERT INTO Clients (full_name, address, telephone, login, password) VALUES
 ('David Brown', '202 Birch St', '555-1111', 'david_b', 'password5');
 
 -- Заполнение таблицы Employees
-INSERT INTO Employees (post_id, full_name, telephone, login, password) VALUES 
-(1, 'Alice Johnson', '555-2222', 'alice_j', 'password6'),
-(2, 'Bob Brown', '555-3333', 'bob_b', 'password7'),
-(3, 'Carol White', '555-4444', 'carol_w', 'password8'),
-(4, 'David Green', '555-5555', 'david_g', 'password9'),
-(5, 'Eve Black', '555-6666', 'eve_b', 'password10');
+INSERT INTO Employees (post_id, full_name, telephone, login, password, is_admin) VALUES 
+(1, 'Alice Johnson', '555-2222', 'alice_j', 'password6', false),
+(2, 'Bob Brown', '555-3333', 'bob_b', 'password7', false),
+(3, 'Carol White', '555-4444', 'carol_w', 'password8', false),
+(4, 'David Green', '555-5555', 'david_g', 'password9', false),
+(5, 'Eve Black', '555-6666', 'eve_b', 'password10', true);
 
 -- Заполнение таблицы TypesOfService
 INSERT INTO TypesOfService (service_type_name) VALUES 
