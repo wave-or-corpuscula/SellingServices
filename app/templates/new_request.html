@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container mt-5">
     <h2 class="mb-4">Create New Request</h2>
-    <form method="POST" action="{{ url_for('clients.new_request') }}">
+    <form method="POST" action="{{ url_for('clients.new_client_request') }}">
         <div class="form-group">
             <label for="service_id">Service</label>
             <select class="form-control" id="service_id" name="service_id" required>

@@ -8,8 +8,8 @@ from app.models import db, OrderRequest, Orders, Delivery, Services, OrdersStatu
 clients = Blueprint("clients", __name__)
 
 
-@clients.route('/view_orders')
-def view_orders():
+@clients.route('/view_client_orders')
+def view_client_orders():
     if session.get('role') != 'client':
         return redirect(url_for('users.login'))
     
@@ -39,8 +39,8 @@ def view_orders():
     
     return render_template('view_orders.html', orders=orders_with_details)
 
-@clients.route('/new_request', methods=['GET', 'POST'])
-def new_request():
+@clients.route('/new_client_request', methods=['GET', 'POST'])
+def new_client_request():
     if session.get('role') != 'client':
         return redirect(url_for('users.login'))
     
@@ -59,13 +59,13 @@ def new_request():
         db.session.commit()
         
         flash('Request created successfully!', 'success')
-        return redirect(url_for('clients.new_request'))
+        return redirect(url_for('clients.new_client_request'))
     
     services = Services.query.all()
     return render_template('new_request.html', services=services)
 
-@clients.route('/view_requests')
-def view_requests():
+@clients.route('/view_client_requests')
+def view_client_requests():
     if session.get('role') != 'client':
         return redirect(url_for('users.login'))
     client_id = session.get('user_id')
@@ -81,11 +81,11 @@ def delete_request(request_id):
     order = OrderRequest.query.get(request_id)
     if not order:
         flash('Request not found.', 'danger')
-        return redirect(url_for('clients.view_requests'))
+        return redirect(url_for('clients.view_client_requests'))
     
     # Удаляем заявку
     db.session.delete(order)
     db.session.commit()
     
     flash('Request deleted successfully.', 'success')
-    return redirect(url_for('clients.view_requests'))
+    return redirect(url_for('clients.view_client_requests'))

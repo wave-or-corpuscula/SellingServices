@@ -14,7 +14,9 @@ def create_app(config=Config):
     
     from app.users.routes import users
     from app.clients.routs import clients
+    from app.employees.routs import employees
     app.register_blueprint(users)
     app.register_blueprint(clients)
+    app.register_blueprint(employees)
 
     return app

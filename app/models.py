@@ -72,11 +72,8 @@ class OrderRequest(db.Model):
     service_id = db.Column(db.Integer, db.ForeignKey('Services.id'), nullable=False)
     order_date = db.Column(db.Date, nullable=False)
 
-    # Связь с таблицей Clients
-    client = db.relationship("Clients", backref="orders")
-    
-    # Связь с таблицей Services
-    service = db.relationship("Services", backref="orders")
+    client = db.relationship('Clients', backref=db.backref('order_requests', lazy=True))
+    service = db.relationship('Services', backref=db.backref('order_requests', lazy=True))
 
     def __repr__(self):
         return f"OrderRequest('{self.client_id}', '{self.service_id}', '{self.order_date}')"

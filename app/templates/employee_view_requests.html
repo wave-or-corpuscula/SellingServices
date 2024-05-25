@@ -1,0 +1,30 @@
+{% extends "dashboard_base.html" %}
+
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Client Requests</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Request ID</th>
+                <th scope="col">Service Name</th>
+                <th scope="col">Client Name</th>
+                <th scope="col">Client Phone</th>
+                <th scope="col">Request Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for request in requests %}
+            <tr>
+                <td>{{ request.id }}</td>
+                <td>{{ request.service.service_name }}</td>
+                <td>{{ request.client.full_name }}</td>
+                <td>{{ request.client.telephone }}</td>
+                <td>{{ request.order_date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
