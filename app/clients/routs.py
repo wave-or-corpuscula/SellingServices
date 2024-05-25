@@ -2,54 +2,67 @@ from datetime import date
 
 from flask import render_template, request, flash, redirect, url_for, Blueprint, session
 
-from app.models import db, OrderRequest, Orders, Delivery, Services, OrdersStatuses
+from app.models import db, OrderRequest, Orders, Delivery, Services, OrdersStatuses, Employees, ServiceObjects
 
 
 clients = Blueprint("clients", __name__)
 
 
-@clients.route('/new_order')
-def new_order():
-    if session.get('role') != 'client':
-        return redirect(url_for('login'))
-    services = Services.query.all()
-    return render_template('new_order.html', services=services)
-
 @clients.route('/view_orders')
 def view_orders():
     if session.get('role') != 'client':
-        return redirect(url_for('login'))
-    orders = Orders.query.filter_by(client_id=session.get('user_id')).all()
-    orders_with_status = []
+        return redirect(url_for('users.login'))
+    
+    client_id = session.get('user_id')
+    orders = Orders.query.filter_by(client_id=client_id).all()
+    
+    orders_with_details = []
     for order in orders:
+        service = Services.query.get(order.service_id)
+        status = OrdersStatuses.query.get(order.status)
         delivery = Delivery.query.filter_by(order_id=order.id).first()
-        status = OrdersStatuses.query.filter_by(delivery_id=delivery.id).first() if delivery else None
-        orders_with_status.append({
+        delivery_date = delivery.delivery_date if delivery else None
+        employee = Employees.query.get(order.employee_id)
+        service_object = ServiceObjects.query.get(order.service_object_id)
+        
+        orders_with_details.append({
             'id': order.id,
-            'service': Services.query.get(order.service_id).service_name,
+            'service_name': service.service_name,
             'order_date': order.order_date,
-            'status': status
+            'status_name': status.status_name,
+            'delivery_date': delivery_date,
+            'count': order.count,
+            'price': order.price,
+            'employee_telephone': employee.telephone if employee else 'N/A',
+            'service_object_name': service_object.object_name if service_object else 'N/A'
         })
-    return render_template('view_orders.html', orders=orders_with_status)
+    
+    return render_template('view_orders.html', orders=orders_with_details)
 
-@clients.route('/create_order', methods=['POST'])
-def create_order():
+@clients.route('/new_request', methods=['GET', 'POST'])
+def new_request():
     if session.get('role') != 'client':
-        return redirect(url_for('login'))
+        return redirect(url_for('users.login'))
     
-    service_id = request.form['service']
+    if request.method == 'POST':
+        service_id = request.form['service_id']
+        client_id = session.get('user_id')
+        order_date = date.today()
+        
+        new_order_request = OrderRequest(
+            client_id=client_id,
+            service_id=service_id,
+            order_date=order_date
+        )
+        
+        db.session.add(new_order_request)
+        db.session.commit()
+        
+        flash('Request created successfully!', 'success')
+        return redirect(url_for('clients.new_request'))
     
-    new_order = Orders(
-        client_id=session.get('user_id'),
-        service_id=service_id,
-        order_date=date.today()
-    )
-    
-    db.session.add(new_order)
-    db.session.commit()
-    
-    flash('Order created successfully!', 'success')
-    return redirect(url_for('view_orders'))
+    services = Services.query.all()
+    return render_template('new_request.html', services=services)
 
 @clients.route('/view_requests')
 def view_requests():
