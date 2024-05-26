@@ -4,12 +4,12 @@ from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationE
 from app.models import Clients, Employees, Services, OrdersStatuses, ServiceObjects, Posts
 
 class ClientForm(FlaskForm):
-    full_name = StringField('Full Name', validators=[DataRequired(), Length(min=2, max=100)])
-    address = StringField('Address', validators=[DataRequired(), Length(min=2, max=200)])
+    full_name = StringField('Full Name', validators=[DataRequired(), Length(min=2, max=150)])
+    address = StringField('Address', validators=[DataRequired(), Length(min=2, max=150)])
     telephone = StringField('Telephone', validators=[DataRequired(), Length(min=10, max=15)])
-    login = StringField('Login', validators=[DataRequired(), Length(min=2, max=100)])
-    password = PasswordField('Password', validators=[Optional(), Length(min=6)])
-    submit = SubmitField('Submit')
+    login = StringField('Login', validators=[DataRequired(), Length(min=2, max=150)])
+    password = PasswordField('Password', validators=[Length(min=6)])
+    submit = SubmitField('Add Client')
 
     def validate_login(self, login):
         client = Clients.query.filter_by(login=login.data).first()
@@ -17,11 +17,11 @@ class ClientForm(FlaskForm):
             raise ValidationError('This login is already taken. Please choose a different one.')
 
 class EmployeeForm(FlaskForm):
-    full_name = StringField('Full Name', validators=[DataRequired(), Length(min=2, max=100)])
+    post_id = IntegerField('Post ID', validators=[DataRequired()])
+    full_name = StringField('Full Name', validators=[DataRequired(), Length(min=2, max=150)])
     telephone = StringField('Telephone', validators=[DataRequired(), Length(min=10, max=15)])
-    login = StringField('Login', validators=[DataRequired(), Length(min=2, max=100)])
-    password = PasswordField('Password', validators=[Optional(), Length(min=6)])
-    post_id = SelectField('Post', coerce=int, validators=[DataRequired()])
+    login = StringField('Login', validators=[DataRequired(), Length(min=2, max=150)])
+    password = PasswordField('Password', validators=[Length(min=6)])
     is_admin = BooleanField('Is Admin')
     submit = SubmitField('Submit')
 

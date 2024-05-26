@@ -1,0 +1,13 @@
+{% extends "admin/base_admin.html" %}
+
+{% block content %}
+<h2>Edit Category</h2>
+<form action="{{ url_for('admin.update_category', category_id=category.id) }}" method="POST">
+    <div class="form-group">
+        <label for="cat_name">Category Name</label>
+        <input type="text" class="form-control" id="cat_name" name="cat_name" value="{{ category.cat_name }}" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Update Category</button>
+    <a href="{{ url_for('admin.manage_categories') }}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

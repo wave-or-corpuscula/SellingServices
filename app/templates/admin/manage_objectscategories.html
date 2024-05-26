@@ -1,0 +1,33 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Управление присвоением объектов к категориям</h2>
+    <a href="{{ url_for('admin.add_objectcategory_form') }}" class="btn btn-primary mb-3">Добавить присвоение объекта к категории</a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Объект</th>
+                <th>Категория</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for objectcategory in objectscategories %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ objectcategory.object.object_name }}</td>
+                <td>{{ objectcategory.category.cat_name }}</td>
+                <td>
+                    <a href="{{ url_for('admin.edit_objectcategory_form', id=objectcategory.id) }}" class="btn btn-warning btn-sm">Изменить</a>
+                    <form action="{{ url_for('admin.delete_objectcategory', id=objectcategory.id) }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

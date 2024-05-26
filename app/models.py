@@ -24,6 +24,8 @@ class Employees(db.Model):
     password = db.Column(db.String(150), nullable=False)
     is_admin = db.Column(db.Boolean, default=False, nullable=False)
 
+    post = db.relationship('Posts', backref=db.backref('Employees', lazy=True))
+
     def __repr__(self):
         return f"Employee('{self.full_name}', '{self.telephone}')"
 
@@ -36,21 +38,13 @@ class Posts(db.Model):
     def __repr__(self):
         return f"Post('{self.post_name}')"
 
-
-class ServiceObjects(db.Model):
-    __tablename__ = 'ServiceObjects'
-    id = db.Column(db.Integer, primary_key=True)
-    object_name = db.Column(db.String(150), nullable=False)
-
-    def __repr__(self):
-        return f"ServiceObject('{self.object_name}')"
-
-
 class StoreHouse(db.Model):
     __tablename__ = 'StoreHouse'
     id = db.Column(db.Integer, primary_key=True)
     object_id = db.Column(db.Integer, db.ForeignKey('ServiceObjects.id'), nullable=False)
     count = db.Column(db.Integer, nullable=False)
+
+    service_object = db.relationship("ServiceObjects", backref=db.backref("StoreHouse", lazy=True))
 
     def __repr__(self):
         return f"StoreHouse('{self.object_id}', '{self.count}')"
@@ -69,11 +63,11 @@ class OrderRequest(db.Model):
     __tablename__ = 'OrderRequest'
     id = db.Column(db.Integer, primary_key=True)
     client_id = db.Column(db.Integer, db.ForeignKey('Clients.id'), nullable=False)
-    service_id = db.Column(db.Integer, db.ForeignKey('Services.id'), nullable=False)
+    service_id = db.Column(db.Integer, db.ForeignKey('Services.id'))
     order_date = db.Column(db.Date, nullable=False)
 
-    client = db.relationship('Clients', backref=db.backref('order_requests', lazy=True))
-    service = db.relationship('Services', backref=db.backref('order_requests', lazy=True))
+    client = db.relationship('Clients', backref=db.backref('OrderRequest', lazy=True))
+    service = db.relationship('Services', backref=db.backref('OrderRequest', lazy=True))
 
     def __repr__(self):
         return f"OrderRequest('{self.client_id}', '{self.service_id}', '{self.order_date}')"
@@ -95,13 +89,21 @@ class Orders(db.Model):
     employee_id = db.Column(db.Integer, db.ForeignKey('Employees.id'), nullable=False)
     service_id = db.Column(db.Integer, db.ForeignKey('Services.id'), nullable=False)
     status = db.Column(db.Integer, db.ForeignKey('OrdersStatuses.id'), nullable=False)
-    service_object_id = db.Column(db.Integer, db.ForeignKey('ServiceObjects.id'), nullable=False)
     order_date = db.Column(db.Date, nullable=False)
-    count = db.Column(db.Integer, nullable=False)
-    price = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
         return f"Order('{self.client_id}', '{self.employee_id}', '{self.service_id}', '{self.status}', '{self.service_object_id}', '{self.order_date}', '{self.count}', '{self.price}')"
+
+
+class OrderedObjects(db.Model):
+    __tablename__ = 'OrderedObjects'
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey('Orders.id'), nullable=False)
+    object_id = db.Column(db.Integer, db.ForeignKey('ServiceObjects.id'), nullable=False)
+    cat_id = db.Column(db.Integer, db.ForeignKey('Categories.id'), nullable=False)
+    sub_cat_id = db.Column(db.Integer, db.ForeignKey('SubCategories.id'), nullable=False)
+    count = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.Integer, nullable=False)
 
 
 class Delivery(db.Model):
@@ -112,7 +114,7 @@ class Delivery(db.Model):
 
     def __repr__(self):
         return f"Delivery('{self.order_id}', '{self.delivery_date}')"
-
+    
 
 class Categories(db.Model):
     __tablename__ = 'Categories'
@@ -126,6 +128,8 @@ class SubCategories(db.Model):
     cat_id = db.Column(db.Integer, db.ForeignKey('Categories.id'), nullable=False)
     subcat_name = db.Column(db.String, nullable=False)
 
+    category = db.relationship("Categories", backref=db.backref('SubCategories', lazy=True))
+
 
 class ObjectsCategories(db.Model):
     __tablename__ = 'ObjectsCategories'
@@ -133,5 +137,14 @@ class ObjectsCategories(db.Model):
     object_id = db.Column(db.Integer, db.ForeignKey('ServiceObjects.id'), nullable=False)
     cat_id = db.Column(db.Integer, db.ForeignKey('Categories.id'), nullable=False)
 
+    object = db.relationship("ServiceObjects", backref=db.backref("ObjectsCategories", lazy=True))
+    category = db.relationship("Categories", backref=db.backref("ObjectsCategories", lazy=True))
 
 
+class ServiceObjects(db.Model):
+    __tablename__ = 'ServiceObjects'
+    id = db.Column(db.Integer, primary_key=True)
+    object_name = db.Column(db.String(150), nullable=False)
+
+    def __repr__(self):
+        return f"ServiceObject('{self.object_name}')"

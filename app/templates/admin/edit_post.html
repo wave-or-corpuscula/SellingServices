@@ -1,0 +1,14 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Изменить пост</h2>
+    <form method="POST" action="{{ url_for('admin.update_post', post_id=post.id) }}">
+        <div class="form-group">
+            <label for="post_name">Название поста</label>
+            <input type="text" class="form-control" id="post_name" name="post_name" value="{{ post.post_name }}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "admin/base_admin.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Изменить объект сервиса</h2>
+    <form method="POST" action="{{ url_for('admin.update_service_object', service_object_id=service_object.id) }}">
+        <div class="form-group">
+            <label for="object_name">Название объекта</label>
+            <input type="text" class="form-control" id="object_name" name="object_name" value="{{ service_object.object_name }}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+    </form>
+</div>
+{% endblock %}

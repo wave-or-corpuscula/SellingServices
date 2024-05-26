@@ -1,0 +1,38 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Изменить сотрудника</h2>
+    <form method="POST" action="{{ url_for('admin.update_employee', employee_id=employee.id) }}">
+        <div class="form-group">
+            <label for="post_id">Должность</label>
+            <select class="form-control" id="post_id" name="post_id" required>
+                {% for post in posts %}
+                <option value="{{ post.id }}" {% if post.id == employee.post_id %}selected{% endif %}>{{ post.post_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="full_name">ФИО</label>
+            <input type="text" class="form-control" id="full_name" name="full_name" value="{{ employee.full_name }}" required>
+        </div>
+        <div class="form-group">
+            <label for="telephone">Телефон</label>
+            <input type="text" class="form-control" id="telephone" name="telephone" value="{{ employee.telephone }}" required>
+        </div>
+        <div class="form-group">
+            <label for="login">Логин</label>
+            <input type="text" class="form-control" id="login" name="login" value="{{ employee.login }}" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Пароль (оставьте пустым, чтобы не изменять)</label>
+            <input type="password" class="form-control" id="password" name="password">
+        </div>
+        <div class="form-group">
+            <label for="is_admin">Администратор</label>
+            <input type="checkbox" id="is_admin" name="is_admin" {% if employee.is_admin %}checked{% endif %}>
+        </div>
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+    </form>
+</div>
+{% endblock %}

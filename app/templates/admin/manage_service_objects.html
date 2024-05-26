@@ -1,0 +1,30 @@
+{% extends "admin/base_admin.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Управление объектами сервисов</h2>
+    <a href="{{ url_for('admin.add_service_object_form') }}" class="btn btn-primary mb-3">Добавить объект сервиса</a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Название объекта</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for service_object in service_objects %}
+            <tr>
+                <td>{{ service_object.id }}</td>
+                <td>{{ service_object.object_name }}</td>
+                <td>
+                    <a href="{{ url_for('admin.edit_service_object_form', service_object_id=service_object.id) }}" class="btn btn-warning btn-sm">Изменить</a>
+                    <form action="{{ url_for('admin.delete_service_object', service_object_id=service_object.id) }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

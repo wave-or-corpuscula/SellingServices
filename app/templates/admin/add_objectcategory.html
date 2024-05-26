@@ -1,0 +1,26 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Добавить присвоение объекта к категории</h2>
+    <form method="POST" action="{{ url_for('admin.add_objectcategory') }}">
+        <div class="form-group">
+            <label for="object_id">Объект</label>
+            <select class="form-control" id="object_id" name="object_id" required>
+                {% for object in objects %}
+                <option value="{{ object.id }}">{{ object.object_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="cat_id">Категория</label>
+            <select class="form-control" id="cat_id" name="cat_id" required>
+                {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.cat_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Добавить</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "admin/base_admin.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Изменить сервис</h2>
+    <form method="POST" action="{{ url_for('admin.update_service', service_id=service.id) }}">
+        <div class="form-group">
+            <label for="service_name">Название сервиса</label>
+            <input type="text" class="form-control" id="service_name" name="service_name" value="{{ service.service_name }}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+    </form>
+</div>
+{% endblock %}
