@@ -10,8 +10,8 @@ clients = Blueprint("clients", __name__)
 
 @clients.route('/view_client_orders')
 def view_client_orders():
-    if session.get('role') != 'client':
-        return redirect(url_for('users.login'))
+    # if session.get('role') != 'client':
+    #     return redirect(url_for('users.login'))
     
     client_id = session.get('user_id')
     orders = Orders.query.filter_by(client_id=client_id).all()
@@ -41,8 +41,8 @@ def view_client_orders():
 
 @clients.route('/new_client_request', methods=['GET', 'POST'])
 def new_client_request():
-    if session.get('role') != 'client':
-        return redirect(url_for('users.login'))
+    # if session.get('role') != 'client':
+    #     return redirect(url_for('users.login'))
     
     if request.method == 'POST':
         service_id = request.form['service_id']
@@ -66,16 +66,16 @@ def new_client_request():
 
 @clients.route('/view_client_requests')
 def view_client_requests():
-    if session.get('role') != 'client':
-        return redirect(url_for('users.login'))
+    # if session.get('role') != 'client':
+    #     return redirect(url_for('users.login'))
     client_id = session.get('user_id')
     orders = OrderRequest.query.filter_by(client_id=client_id).all()
     return render_template('view_requests.html', orders=orders)
 
 @clients.route('/delete_request/<int:request_id>', methods=['POST', 'DELETE'])
 def delete_request(request_id):
-    if session.get('role') != 'client':
-        return redirect(url_for('users.login'))
+    # if session.get('role') != 'client':
+    #     return redirect(url_for('users.login'))
     
     # Проверяем, существует ли такая заявка
     order = OrderRequest.query.get(request_id)

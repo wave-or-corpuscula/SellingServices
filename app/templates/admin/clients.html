@@ -1,0 +1,32 @@
+{% extends "admin/base_admin.html" %}
+{% block content %}
+<h2>Clients</h2>
+<a href="{{ url_for('admin.add_client') }}" class="btn btn-primary mb-3">Add Client</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Full Name</th>
+            <th>Address</th>
+            <th>Telephone</th>
+            <th>Login</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for client in clients %}
+        <tr>
+            <td>{{ client.id }}</td>
+            <td>{{ client.full_name }}</td>
+            <td>{{ client.address }}</td>
+            <td>{{ client.telephone }}</td>
+            <td>{{ client.login }}</td>
+            <td>
+                <a href="{{ url_for('admin.edit_client', id=client.id) }}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{{ url_for('admin.delete_client', id=client.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this client?');">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

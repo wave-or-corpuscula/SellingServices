@@ -1,0 +1,26 @@
+{% extends "admin/base_admin.html" %}
+{% block content %}
+<h2>Posts</h2>
+<a href="{{ url_for('admin.add_post') }}" class="btn btn-primary mb-3">Add Post</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Post Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for post in posts %}
+        <tr>
+            <td>{{ post.id }}</td>
+            <td>{{ post.post_name }}</td>
+            <td>
+                <a href="{{ url_for('admin.edit_post', post_id=post.id) }}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{{ url_for('admin.delete_post', post_id=post.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this post?');">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

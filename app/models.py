@@ -113,3 +113,25 @@ class Delivery(db.Model):
     def __repr__(self):
         return f"Delivery('{self.order_id}', '{self.delivery_date}')"
 
+
+class Categories(db.Model):
+    __tablename__ = 'Categories'
+    id = db.Column(db.Integer, primary_key=True)
+    cat_name = db.Column(db.String, nullable=False)
+
+
+class SubCategories(db.Model):
+    __tablename__ = 'SubCategories'
+    id = db.Column(db.Integer, primary_key=True)
+    cat_id = db.Column(db.Integer, db.ForeignKey('Categories.id'), nullable=False)
+    subcat_name = db.Column(db.String, nullable=False)
+
+
+class ObjectsCategories(db.Model):
+    __tablename__ = 'ObjectsCategories'
+    id = db.Column(db.Integer, primary_key=True)
+    object_id = db.Column(db.Integer, db.ForeignKey('ServiceObjects.id'), nullable=False)
+    cat_id = db.Column(db.Integer, db.ForeignKey('Categories.id'), nullable=False)
+
+
+

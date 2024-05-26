@@ -1,0 +1,32 @@
+{% extends "admin/base_admin.html" %}
+{% block content %}
+<h2>{{ form_title }}</h2>
+<form method="POST" action="{{ url_for(form_action, employee_id=employee.id if employee else None) }}">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.full_name.label(class="form-control-label") }}
+        {{ form.full_name(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.telephone.label(class="form-control-label") }}
+        {{ form.telephone(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.login.label(class="form-control-label") }}
+        {{ form.login(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.password.label(class="form-control-label") }}
+        {{ form.password(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.post_id.label(class="form-control-label") }}
+        {{ form.post_id(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.is_admin.label(class="form-check-label") }}
+        {{ form.is_admin(class="form-check-input") }}
+    </div>
+    <button type="submit" class="btn btn-primary">{{ submit_text }}</button>
+</form>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "dashboard_base.html" %}
+
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Order Details</h2>
+    <div class="mb-3">
+        <label class="form-label">Order ID</label>
+        <input type="text" class="form-control" value="{{ order.id }}" readonly>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Client Name</label>
+        <input type="text" class="form-control" value="{{ client.full_name }}" readonly>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Client Phone</label>
+        <input type="text" class="form-control" value="{{ client.telephone }}" readonly>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Service</label>
+        <input type="text" class="form-control" value="{{ service.service_name }}" readonly>
+    </div>
+    <form method="POST">
+        <div class="mb-3">
+            <label for="service_object_id" class="form-label">Service Object</label>
+            <select class="form-select" id="service_object_id" name="service_object_id">
+                {% for service_object in service_objects %}
+                <option value="{{ service_object.id }}" {% if order.service_object_id == service_object.id %}selected{% endif %}>{{ service_object.object_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="delivery_date" class="form-label">Delivery Date</label>
+            <input type="date" class="form-control" id="delivery_date" name="delivery_date" value="{{ delivery.delivery_date if delivery else '' }}">
+        </div>
+        <div class="mb-3">
+            <label for="count" class="form-label">Count</label>
+            <input type="number" class="form-control" id="count" name="count" value="{{ order.count }}">
+        </div>
+        <div class="mb-3">
+            <label for="price" class="form-label">Price</label>
+            <input type="number" class="form-control" id="price" name="price" value="{{ order.price }}">
+        </div>
+        <div class="mb-3">
+            <label for="status" class="form-label">Order Status</label>
+            <select class="form-select" id="status" name="status">
+                {% for status in statuses %}
+                <option value="{{ status.id }}" {% if order.status == status.id %}selected{% endif %}>{{ status.status_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Order</button>
+    </form>
+</div>
+{% endblock %}

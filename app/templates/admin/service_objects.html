@@ -1,0 +1,26 @@
+{% extends "admin/base_admin.html" %}
+{% block content %}
+<h2>Service Objects</h2>
+<a href="{{ url_for('admin.add_service_object') }}" class="btn btn-primary mb-3">Add Service Object</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Object Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for service_object in service_objects %}
+        <tr>
+            <td>{{ service_object.id }}</td>
+            <td>{{ service_object.object_name }}</td>
+            <td>
+                <a href="{{ url_for('admin.edit_service_object', service_object_id=service_object.id) }}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{{ url_for('admin.delete_service_object', service_object_id=service_object.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this service object?');">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
