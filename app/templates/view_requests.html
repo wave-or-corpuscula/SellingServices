@@ -2,13 +2,13 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Your Requests</h2>
+    <h2>Ваши заявки</h2>
     <table class="table">
         <thead>
             <tr>
                 <th>#</th>
-                <th>Service Name</th>
-                <th>Order Date</th>
+                <th>Название услуги</th>
+                <th>Дата оформления</th>
                 <th></th>
             </tr>
         </thead>
@@ -20,7 +20,7 @@
                 <td>{{ order.order_date }}</td>
                 <td>
                     <form action="{{ url_for('clients.delete_request', request_id=order.id) }}" method="post">
-                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <button type="submit" class="btn btn-danger">Удалить</button>
                     </form>
                 </td>
             </tr>

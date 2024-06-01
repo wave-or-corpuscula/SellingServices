@@ -3,16 +3,16 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h2 class="mb-4">Client Requests</h2>
+    <h2 class="mb-4">Заявки клиентов</h2>
     <table class="table table-striped">
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Service Name</th>
-                <th scope="col">Client Name</th>
-                <th scope="col">Client Phone</th>
-                <th scope="col">Request Date</th>
-                <th scope="col">Actions</th>
+                <th scope="col">Услуга</th>
+                <th scope="col">Клиент</th>
+                <th scope="col">Телефон</th>
+                <th scope="col">Дата заявки</th>
+                <th scope="col">Действие</th>
             </tr>
         </thead>
         <tbody>
@@ -24,7 +24,7 @@
                 <td>{{ request.client.telephone }}</td>
                 <td>{{ request.order_date }}</td>
                 <td>
-                    <a href="{{ url_for('employees.create_order', request_id=request.id) }}" class="btn btn-primary">Process Order</a>
+                    <a href="{{ url_for('employees.create_order', request_id=request.id) }}" class="btn btn-primary">Обработать</a>
                 </td>
             </tr>
             {% endfor %}

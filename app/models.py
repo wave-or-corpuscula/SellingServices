@@ -54,6 +54,7 @@ class Services(db.Model):
     __tablename__ = 'Services'
     id = db.Column(db.Integer, primary_key=True)
     service_name = db.Column(db.String(150), nullable=False)
+    cost = db.Column(db.Float, nullable=False)
 
     def __repr__(self):
         return f"Service('{self.service_name}')"
@@ -127,6 +128,7 @@ class SubCategories(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     cat_id = db.Column(db.Integer, db.ForeignKey('Categories.id'), nullable=False)
     subcat_name = db.Column(db.String, nullable=False)
+    cost = db.Column(db.Float, nullable=False)
 
     category = db.relationship("Categories", backref=db.backref('SubCategories', lazy=True))
 
@@ -145,6 +147,7 @@ class ServiceObjects(db.Model):
     __tablename__ = 'ServiceObjects'
     id = db.Column(db.Integer, primary_key=True)
     object_name = db.Column(db.String(150), nullable=False)
+    cost = db.Column(db.Float, nullable=False)
 
     def __repr__(self):
         return f"ServiceObject('{self.object_name}')"

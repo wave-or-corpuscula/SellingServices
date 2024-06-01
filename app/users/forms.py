@@ -5,18 +5,18 @@ from wtforms.validators import DataRequired, Regexp
 
 class RegistrationForm(FlaskForm):
 
-    full_name = StringField('Full name', validators=[DataRequired()])
-    phone = StringField('Phone', validators=[
+    full_name = StringField('ФИО', validators=[DataRequired()])
+    phone = StringField('Телефон', validators=[
         DataRequired(), 
-        Regexp(r'^[\d\s()+]+$', message="Invalid phone number.")]) # TODO: Make phone validation
-    address = StringField('Address', validators=[DataRequired()])
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    submit = SubmitField("Submit")
+        Regexp(r'^[\d\s()+]+$', message="Невалидный телефон.")])
+    address = StringField('Адрес', validators=[DataRequired(message="Обязательное поле")])
+    username = StringField('Имя пользователя', validators=[DataRequired()])
+    password = PasswordField('Пароль', validators=[DataRequired()])
+    submit = SubmitField("Зарегистрироваться")
 
 
 class LoginForm(FlaskForm):
 
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    submit = SubmitField("Submit")
+    username = StringField('Имя пользователя', validators=[DataRequired()])
+    password = PasswordField('Пароль', validators=[DataRequired()])
+    submit = SubmitField("Войти")

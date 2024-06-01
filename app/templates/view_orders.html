@@ -4,19 +4,16 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h2 class="mb-4">My Orders</h2>
+    <h2 class="mb-4">Мои заказы</h2>
     <table class="table table-striped">
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Service Name</th>
-                <th scope="col">Order Date</th>
-                <th scope="col">Delivery Date</th>
-                <th scope="col">Count</th>
-                <th scope="col">Price</th>
-                <th scope="col">Employee Telephone</th>
-                <th scope="col">Service Object</th>
-                <th scope="col">Status</th>
+                <th scope="col">Услуга</th>
+                <th scope="col">Дата оформления</th>
+                <th scope="col">Дата доставки</th>
+                <th scope="col">Телефон сотрудника</th>
+                <th scope="col">Статус</th>
             </tr>
         </thead>
         <tbody>
@@ -25,11 +22,8 @@
                 <td>{{ loop.index }}</td>
                 <td>{{ order.service_name }}</td>
                 <td>{{ order.order_date }}</td>
-                <td>{{ order.delivery_date if order.delivery_date else 'Pending' }}</td>
-                <td>{{ order.count }}</td>
-                <td>{{ order.price }}</td>
+                <td>{{ order.delivery_date if order.delivery_date else 'Не требуется' }}</td>
                 <td>{{ order.employee_telephone }}</td>
-                <td>{{ order.service_object_name }}</td>
                 <td>{{ order.status_name }}</td>
             </tr>
             {% endfor %}

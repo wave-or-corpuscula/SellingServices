@@ -4,17 +4,23 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h2 class="mb-4">Create New Request</h2>
+    <h2 class="mb-4">Оформление заявки на заказ</h2>
     <form method="POST" action="{{ url_for('clients.new_client_request') }}">
         <div class="form-group">
-            <label for="service_id">Service</label>
+            <label for="service_id" style="font-size: 20px;">Услуга</label>
             <select class="form-control" id="service_id" name="service_id" required>
                 {% for service in services %}
-                    <option value="{{ service.id }}">{{ service.service_name }}</option>
+                    <option value="{{ service.id }}" cost="{{ service.cost }}">{{ service.service_name }}</option>
                 {% endfor %}
             </select>
+            <div class="mb-3">
+                <label for="serviceCost" class="form-label">Стоимость услуги</label>
+                <input type="text" class="form-control" id="serviceCost" value="0" readonly>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Submit Request</button>
+        <button type="submit" class="btn btn-primary">Оформить заявку</button>
     </form>
 </div>
+
+<script src="{{url_for('static', filename='js/client_create_request.js')}}"></script>
 {% endblock %}

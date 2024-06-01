@@ -1,0 +1,43 @@
+<div id="service_object_item_{{ service_object_id }}">
+    <div id="service_objects_list">
+
+    </div>
+    <div id="service_object_cats">
+
+    </div>
+
+</div>
+
+<script>
+
+function serviceObjectChanged(currentId, servObjectCatsDiv) {
+    fetch(`/get_object_categories/${currentId}`)
+    .then(response => response.json())
+    .then((data) => {
+        servObjectCatsDiv.innerHTML = data.html;
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const objectIndex = parseInt("{{ service_object_id }}");
+    const servObjectDiv = document.getElementById(`service_object_item_${objectIndex}`);
+    const serObjectsList = document.getElementById(`service_objects_list`);
+    const serObjectCats = document.getElementById(`service_object_cats`);
+
+    fetch(`/get_service_objects_list/${objectIndex}`)
+    .then(response => response.json())
+    .then((data) => {
+        serObjectsList.innerHTML = data.html;
+    });
+    
+    fetch(`/get_object_categories/${objectIndex}`)
+    .then(response => response.json())
+    .then((data) => {
+        serObjectCats.innerHTML = data.html;
+    });
+
+    document.getElementById(`objects_list_index_${objectIndex}`)
+
+});
+
+</script>

@@ -1,0 +1,61 @@
+{% extends "dashboard_base.html" %}
+
+{% block content %}
+<h1>Детали заказа №{{ order.id }}</h1>
+
+<form method="POST">
+    <div class="form-group">
+        <label for="status">Статус</label>
+        <select class="form-control" id="status" name="status">
+            {% for status in order_statuses %}
+            <option value="{{ status.id }}" {% if status.id == order.status %}selected{% endif %}>{{ status.status_name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="order_date">Дата заказа</label>
+        <input type="date" class="form-control" id="order_date" name="order_date" value="{{ order.order_date }}">
+    </div>
+
+    <div id="ordered-objects-container">
+        {% for obj in ordered_objects %}
+        <div class="ordered-object" data-index="{{ loop.index }}">
+            <div class="form-group">
+                <label for="object_id_{{ loop.index }}">Объект</label>
+                <select class="form-control service-object-select" id="object_id_{{ loop.index }}" name="object_id">
+                    {% for so in service_objects %}
+                    <option value="{{ so.id }}" {% if so.id == obj.object_id %}selected{% endif %}>{{ so.object_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="cat_id_{{ loop.index }}">Категория</label>
+                <select class="form-control category-select" id="cat_id_{{ loop.index }}" name="cat_id" data-index="{{ loop.index }}">
+                    <!-- Options will be loaded dynamically -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="sub_cat_id_{{ loop.index }}">Подкатегория</label>
+                <select class="form-control subcategory-select" id="sub_cat_id_{{ loop.index }}" name="sub_cat_id" data-index="{{ loop.index }}">
+                    <!-- Options will be loaded dynamically -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="count_{{ loop.index }}">Количество</label>
+                <input type="number" class="form-control" id="count_{{ loop.index }}" name="count" value="{{ obj.count }}">
+            </div>
+            <div class="form-group">
+                <label for="price_{{ loop.index }}">Цена</label>
+                <input type="number" class="form-control" id="price_{{ loop.index }}" name="price" value="{{ obj.price }}">
+            </div>
+            <button type="button" class="btn btn-danger remove-object-button">Удалить объект</button>
+        </div>
+        {% endfor %}
+    </div>
+    <button type="button" class="btn btn-primary" id="add-object-button">Добавить объект</button>
+
+    <button type="submit" class="btn btn-success">Сохранить изменения</button>
+</form>
+
+<script src="{{url_for('static', filename='js/process_order.js')}}"></script>
+{% endblock %}

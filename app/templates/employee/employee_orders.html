@@ -2,17 +2,16 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h2 class="mb-4">My Orders</h2>
+    <h2 class="mb-4">Мои заказы</h2>
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th>#</th>
-                <th>Client Name</th>
-                <th>Service</th>
-                <th>Service Object</th>
-                <th>Order Date</th>
-                <th>Status</th>
-                <th>Action</th>
+                <th>Клиент</th>
+                <th>Услуга</th>
+                <th>Дата заказа</th>
+                <th>Статус</th>
+                <th>Действие</th>
             </tr>
         </thead>
         <tbody>
@@ -21,10 +20,9 @@
                 <td>{{ loop.index }}</td>
                 <td>{{ order.client_name }}</td>
                 <td>{{ order.service_name }}</td>
-                <td>{{ order.service_object_name }}</td>
                 <td>{{ order.order_date }}</td>
                 <td>{{ order.status }}</td>
-                <td><a href="{{ url_for('employees.view_order', order_id=order.id) }}" class="btn btn-primary btn-sm">View</a></td>
+                <td><a href="{{ url_for('employees.order_details', order_id=order.id) }}" class="btn btn-primary btn-sm">Перейти</a></td>
             </tr>
             {% endfor %}
         </tbody>

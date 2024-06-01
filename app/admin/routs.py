@@ -36,7 +36,7 @@ def add_client():
         )
         db.session.add(client)
         db.session.commit()
-        flash('Client added successfully!', 'success')
+        flash('Клиент добавлен!', 'success')
         return redirect(url_for('admin.manage_clients'))
     return render_template('admin/add_client.html', form=form)
 
@@ -61,7 +61,7 @@ def update_client(id):
     if form.password.data:
         client.password = generate_password_hash(form.password.data)
     db.session.commit()
-    flash('Client updated successfully!', 'success')
+    flash('Клиент изменен!', 'success')
     return redirect(url_for('admin.manage_clients'))
 
 @admin.route('/admin/client/delete/<int:id>')
@@ -71,7 +71,7 @@ def delete_client(id):
     client = Clients.query.get_or_404(id)
     db.session.delete(client)
     db.session.commit()
-    flash('Client deleted successfully!', 'success')
+    flash('Клиент удален!', 'success')
     return redirect(url_for('admin.manage_clients'))
 
 ##########   CLIENT ROUTS    ##########

@@ -3,26 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}My Application{% endblock %}</title>
+    <title>{% block title %}Оформление услуг{% endblock %}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{{ url_for('users.home') }}">My Application</a>
+        <a class="navbar-brand" href=#>Оформление услуг</a>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 {% if session.get('role') == 'client' %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('users.client_dashboard') }}">Dashboard</a>
+                    <a class="nav-link" href="{{ url_for('users.client_dashboard') }}">Панель инструментов</a>
                 </li>
                 {% elif session.get('role') in ['employee', 'admin'] %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('users.employee_dashboard') }}">Dashboard</a>
+                    <a class="nav-link" href="{{ url_for('users.employee_dashboard') }}">Панель инструментов</a>
                 </li>
                 {% endif %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('users.login') }}">Logout</a>
+                    <a class="nav-link" href="{{ url_for('users.login') }}">Выйти</a>
                 </li>
             </ul>
         </div>
@@ -47,7 +47,7 @@
     </div>
     <footer class="footer mt-auto py-3 bg-light">
         <div class="container">
-            <span class="text-muted">&copy; 2023 My Application</span>
+            <span class="text-muted">&copy; 2024 Оформление услуг. При возникновении ошибок, недочетов или багов, свяжитесь с нами здесь: ilya.belmachhh@gmail.com</span>
         </div>
     </footer>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

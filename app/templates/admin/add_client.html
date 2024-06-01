@@ -2,30 +2,30 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Add Client</h2>
+    <h2>Добавить клиента</h2>
     <form method="POST" action="{{ url_for('admin.add_client') }}">
         {{ form.hidden_tag() }}
         <div class="form-group">
             {{ form.full_name.label(class="form-control-label") }}
-            {{ form.full_name(class="form-control", placeholder="Enter full name") }}
+            {{ form.full_name(class="form-control", placeholder="Введите ФИО") }}
         </div>
         <div class="form-group">
             {{ form.address.label(class="form-control-label") }}
-            {{ form.address(class="form-control", placeholder="Enter address") }}
+            {{ form.address(class="form-control", placeholder="Введите адрес") }}
         </div>
         <div class="form-group">
             {{ form.telephone.label(class="form-control-label") }}
-            {{ form.telephone(class="form-control", placeholder="Enter telephone") }}
+            {{ form.telephone(class="form-control", placeholder="Введите телефон") }}
         </div>
         <div class="form-group">
             {{ form.login.label(class="form-control-label") }}
-            {{ form.login(class="form-control", placeholder="Enter login") }}
+            {{ form.login(class="form-control", placeholder="Введите имя пользователя") }}
         </div>
         <div class="form-group">
             {{ form.password.label(class="form-control-label") }}
-            {{ form.password(class="form-control", placeholder="Enter password") }}
+            {{ form.password(class="form-control", placeholder="Введите пароль") }}
         </div>
-        <button type="submit" class="btn btn-primary">Add Client</button>
+        <button type="submit" class="btn btn-primary">Добавить клиента</button>
     </form>
 </div>
 {% endblock %}

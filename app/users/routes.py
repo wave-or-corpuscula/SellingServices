@@ -26,7 +26,7 @@ def register():
         existing_user = Clients.query.filter((Clients.login == username) | (Clients.telephone == telephone)).first()
         existing_employee = Employees.query.filter((Employees.login == username) | (Employees.telephone == telephone)).first()
         if existing_user or existing_employee:
-            flash('Username or phone number already exists.', 'danger')
+            flash('Имя пользователя или телефон уже существуют', 'danger')
             return redirect(url_for('users.register'))
         
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
@@ -35,7 +35,7 @@ def register():
         db.session.add(new_user)
         db.session.commit()
         
-        flash('Registration successful! You can now log in.', "success")
+        flash('Регистрация успешна! Теперь можете войти', "success")
         return redirect(url_for('users.login'))
     return render_template('auth_register.html', form=form)
 
@@ -76,7 +76,7 @@ def client_dashboard():
 @users.route('/employee_dashboard')
 def employee_dashboard():
     if session.get('role') == 'employee':
-        return render_template('dashboard_employee.html')
+        return render_template('employee/dashboard_employee.html')
     elif session.get('role') == 'admin':
         return render_template('admin/base_admin.html')
     return redirect(url_for('users.login'))

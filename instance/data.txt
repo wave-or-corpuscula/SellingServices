@@ -23,12 +23,12 @@ INSERT INTO Employees (post_id, full_name, telephone, login, password, is_admin)
 (5, 'Angela Martin', '543-210-9876', 'amartin', 'password10', TRUE);
 
 -- Inserting data into ServiceObjects table
-INSERT INTO ServiceObjects (object_name) VALUES
-('Object A'),
-('Object B'),
-('Object C'),
-('Object D'),
-('Object E');
+INSERT INTO ServiceObjects (object_name, cost) VALUES
+('Object A', 100),
+('Object B', 200),
+('Object C', 300),
+('Object D', 400),
+('Object E', 500);
 
 -- Inserting data into StoreHouse table
 INSERT INTO StoreHouse (object_id, count) VALUES
@@ -39,12 +39,12 @@ INSERT INTO StoreHouse (object_id, count) VALUES
 (5, 300);
 
 -- Inserting data into Services table
-INSERT INTO Services (service_name) VALUES
-('Service 1'),
-('Service 2'),
-('Service 3'),
-('Service 4'),
-('Service 5');
+INSERT INTO Services (service_name, cost) VALUES
+('Service 1', 100),
+('Service 2', 200),
+('Service 3', 300),
+('Service 4', 400),
+('Service 5', 500);
 
 -- Inserting data into OrderRequest table
 INSERT INTO OrderRequest (client_id, service_id, order_date) VALUES
@@ -82,11 +82,17 @@ INSERT INTO Categories (cat_name) VALUES
 ('Category 1'), ('Category 2'), ('Category 3'), ('Category 4'), ('Category 5'),
 ('Category 6'), ('Category 7'), ('Category 8'), ('Category 9'), ('Category 10');
 
-INSERT INTO SubCategories (cat_id, subcat_name) VALUES
-(1, 'SubCategory 1-1'), (1, 'SubCategory 1-2'), (2, 'SubCategory 2-1'), 
-(2, 'SubCategory 2-2'), (3, 'SubCategory 3-1'), (3, 'SubCategory 3-2'), 
-(4, 'SubCategory 4-1'), (4, 'SubCategory 4-2'), (5, 'SubCategory 5-1'), 
-(5, 'SubCategory 5-2');
+INSERT INTO SubCategories (cat_id, subcat_name, cost) VALUES
+(1, 'SubCategory 1-1', 10), 
+(1, 'SubCategory 1-2', 14), 
+(2, 'SubCategory 2-1', 15), 
+(2, 'SubCategory 2-2', 17), 
+(3, 'SubCategory 3-1', 21), 
+(3, 'SubCategory 3-2', 45), 
+(4, 'SubCategory 4-1', 44), 
+(4, 'SubCategory 4-2', 63), 
+(5, 'SubCategory 5-1', 12), 
+(5, 'SubCategory 5-2', 8);
 
 INSERT INTO ObjectsCategories (object_id, cat_id) VALUES
 (1, 1), (1, 2), (2, 3), (2, 4), (3, 5), (3, 6), (4, 7), (4, 8), (5, 9), (5, 10);

@@ -1,19 +1,19 @@
 {% extends "dashboard_base.html" %}
 
-{% block title %}Client Dashboard{% endblock %}
+{% block title %}Панель инструментов{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2>Client Dashboard</h2>
+<div class="container mt-4" align="center">
+    <h2>Панель инструментов</h2>
     <div class="column">
         <div class="col-md-4">
-            <a href="{{ url_for('clients.new_client_request') }}" class="btn btn-primary btn-block mb-3">Create New Request</a>        
+            <a href="{{ url_for('clients.new_client_request') }}" class="btn btn-primary btn-block mb-3">Оформить новую заявку</a>        
         </div>
         <div class="col-md-4">
-            <a href="{{ url_for('clients.view_client_requests') }}" class="btn btn-primary btn-block mb-3">View Requests</a>
+            <a href="{{ url_for('clients.view_client_requests') }}" class="btn btn-primary btn-block mb-3">Мои заявки</a>
         </div>
         <div class="col-md-4">
-            <a href="{{ url_for('clients.view_client_orders') }}" class="btn btn-primary btn-block mb-3">View Orders</a>
+            <a href="{{ url_for('clients.view_client_orders') }}" class="btn btn-primary btn-block mb-3">Мои заказы</a>
         </div>
     </div>
 </div>

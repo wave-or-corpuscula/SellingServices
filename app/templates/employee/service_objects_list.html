@@ -1,0 +1,5 @@
+<select class="form-control service-object-select" id="objects_list" name="service_object">
+    {% for so in service_objects %}
+    <option value="{{ so.id }}">{{ so.object_name }}</option>
+    {% endfor %}
+</select>

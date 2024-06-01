@@ -1,13 +1,13 @@
 {% extends "admin/base_admin.html" %}
 {% block content %}
 <div class="container mt-4">
-    <h2>Управление сервисами</h2>
-    <a href="{{ url_for('admin.add_service_form') }}" class="btn btn-primary mb-3">Добавить сервис</a>
+    <h2>Услуги</h2>
+    <a href="{{ url_for('admin.add_service_form') }}" class="btn btn-primary mb-3">Добавить услугу</a>
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th>#</th>
-                <th>Название сервиса</th>
+                <th>Название услуги</th>
                 <th>Действия</th>
             </tr>
         </thead>
