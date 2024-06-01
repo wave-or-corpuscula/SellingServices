@@ -175,9 +175,14 @@ function setOrderCost() {
 
 function collectAllObjectsData() {
     const serviceObjectsItems = Array.from(document.getElementsByClassName("service-object-item"));
+    // let objectData = {
+    //     "object_id": 1,
+    //     "object_categories":
+    // }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("add_service_object_but").addEventListener("click", addNewServiceObjectItem);
+    setOrderCost();
 })
 

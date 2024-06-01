@@ -101,10 +101,23 @@ class OrderedObjects(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey('Orders.id'), nullable=False)
     object_id = db.Column(db.Integer, db.ForeignKey('ServiceObjects.id'), nullable=False)
-    cat_id = db.Column(db.Integer, db.ForeignKey('Categories.id'), nullable=False)
-    sub_cat_id = db.Column(db.Integer, db.ForeignKey('SubCategories.id'), nullable=False)
     count = db.Column(db.Integer, nullable=False)
-    price = db.Column(db.Integer, nullable=False)
+
+    object = db.relationship('ServiceObjects', backref=db.backref('OrderedObjects', lazy=True))
+
+
+class OrderedObjectCategories(db.Model):
+    __tablename__ = 'OrderedObjectCategories'
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey("Orders.id"), nullable=False)
+    object_id = db.Column(db.Integer, db.ForeignKey("ServiceObjects.id"), nullable=False)
+    cat_id = db.Column(db.Integer, db.ForeignKey("Categories.id"), nullable=False)
+    subcat_id = db.Column(db.Integer, db.ForeignKey("SubCategories.id"))
+
+    order = db.relationship("Orders", backref=db.backref("OrderedObjectCategories", lazy=True))
+    object = db.relationship("ServiceObjects", backref=db.backref("OrderedObjectCategories", lazy=True))
+    subcategory = db.relationship("SubCategories", backref=db.backref("OrderedObjectCategories", lazy=True))
+    category = db.relationship("Categories", backref=db.backref("OrderedObjectCategories", lazy=True))
 
 
 class Delivery(db.Model):
