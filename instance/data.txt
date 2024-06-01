@@ -1,10 +1,10 @@
 -- Inserting data into Clients table
 INSERT INTO Clients (full_name, address, telephone, login, password) VALUES
-('John Doe', '123 Elm St', '123-456-7890', 'johndoe', 'password1'),
-('Jane Smith', '456 Oak St', '234-567-8901', 'janesmith', 'password2'),
-('Alice Johnson', '789 Pine St', '345-678-9012', 'alicejohnson', 'password3'),
-('Bob Brown', '101 Maple St', '456-789-0123', 'bobbrown', 'password4'),
-('Charlie Davis', '202 Birch St', '567-890-1234', 'charliedavis', 'password5');
+('John Doe', '123 Elm St', '123-456-7890', 'johndoe', 'pbkdf2:sha256:600000$ra8XPteOO1XV43WW$780a5607393cbb09e0f4e2ec82a3c0c0590e1a5c51fb51a80a365f3cce909fc9'),
+('Jane Smith', '456 Oak St', '234-567-8901', 'janesmith', 'pbkdf2:sha256:600000$ra8XPteOO1XV43WW$780a5607393cbb09e0f4e2ec82a3c0c0590e1a5c51fb51a80a365f3cce909fc9'),
+('Alice Johnson', '789 Pine St', '345-678-9012', 'alicejohnson', 'pbkdf2:sha256:600000$ra8XPteOO1XV43WW$780a5607393cbb09e0f4e2ec82a3c0c0590e1a5c51fb51a80a365f3cce909fc9'),
+('Bob Brown', '101 Maple St', '456-789-0123', 'bobbrown', 'pbkdf2:sha256:600000$ra8XPteOO1XV43WW$780a5607393cbb09e0f4e2ec82a3c0c0590e1a5c51fb51a80a365f3cce909fc9'),
+('Charlie Davis', '202 Birch St', '567-890-1234', 'charliedavis', 'pbkdf2:sha256:600000$ra8XPteOO1XV43WW$780a5607393cbb09e0f4e2ec82a3c0c0590e1a5c51fb51a80a365f3cce909fc9');
 
 -- Inserting data into Posts table
 INSERT INTO Posts (post_name) VALUES
@@ -16,11 +16,11 @@ INSERT INTO Posts (post_name) VALUES
 
 -- Inserting data into Employees table
 INSERT INTO Employees (post_id, full_name, telephone, login, password, is_admin) VALUES
-(1, 'Michael Scott', '987-654-3210', 'mscott', 'password6', FALSE),
-(2, 'Dwight Schrute', '876-543-2109', 'dschrute', 'password7', FALSE),
-(3, 'Pam Beesly', '765-432-1098', 'pbeesly', 'password8', FALSE),
-(4, 'Jim Halpert', '654-321-0987', 'jhalpert', 'password9', FALSE),
-(5, 'Angela Martin', '543-210-9876', 'amartin', 'password10', TRUE);
+(1, 'Michael Scott', '987-654-3210', 'mscott', 'pbkdf2:sha256:600000$ra8XPteOO1XV43WW$780a5607393cbb09e0f4e2ec82a3c0c0590e1a5c51fb51a80a365f3cce909fc9', FALSE),
+(2, 'Dwight Schrute', '876-543-2109', 'dschrute', 'pbkdf2:sha256:600000$ra8XPteOO1XV43WW$780a5607393cbb09e0f4e2ec82a3c0c0590e1a5c51fb51a80a365f3cce909fc9', FALSE),
+(3, 'Pam Beesly', '765-432-1098', 'pbeesly', 'pbkdf2:sha256:600000$ra8XPteOO1XV43WW$780a5607393cbb09e0f4e2ec82a3c0c0590e1a5c51fb51a80a365f3cce909fc9', FALSE),
+(4, 'Jim Halpert', '654-321-0987', 'jhalpert', 'pbkdf2:sha256:600000$ra8XPteOO1XV43WW$780a5607393cbb09e0f4e2ec82a3c0c0590e1a5c51fb51a80a365f3cce909fc9', FALSE),
+(5, 'Angela Martin', '543-210-9876', 'amartin', 'pbkdf2:sha256:600000$ra8XPteOO1XV43WW$780a5607393cbb09e0f4e2ec82a3c0c0590e1a5c51fb51a80a365f3cce909fc9', TRUE);
 
 -- Inserting data into ServiceObjects table
 INSERT INTO ServiceObjects (object_name, cost) VALUES
@@ -63,7 +63,7 @@ INSERT INTO OrdersStatuses (status_name) VALUES
 ('On Hold');
 
 -- Заполнение таблицы Orders
-INSERT INTO Orders (client_id, employee_id, service_id, status, order_date) VALUES
+INSERT INTO Orders (client_id, employee_id, service_id, status_id, order_date) VALUES
 (1, 1, 1, 1, '2023-01-01'),
 (2, 2, 2, 2, '2023-01-02'),
 (3, 3, 3, 3, '2023-01-03'),

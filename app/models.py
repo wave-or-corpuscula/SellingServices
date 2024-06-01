@@ -89,8 +89,13 @@ class Orders(db.Model):
     client_id = db.Column(db.Integer, db.ForeignKey('Clients.id'), nullable=False)
     employee_id = db.Column(db.Integer, db.ForeignKey('Employees.id'), nullable=False)
     service_id = db.Column(db.Integer, db.ForeignKey('Services.id'), nullable=False)
-    status = db.Column(db.Integer, db.ForeignKey('OrdersStatuses.id'), nullable=False)
+    status_id = db.Column(db.Integer, db.ForeignKey('OrdersStatuses.id'), nullable=False)
     order_date = db.Column(db.Date, nullable=False)
+
+    client = db.relationship('Clients', backref=db.backref('OrderedObjects', lazy=True))
+    employee = db.relationship('Employees', backref=db.backref('OrderedObjects', lazy=True))
+    service = db.relationship('Services', backref=db.backref('OrderedObjects', lazy=True))
+    status = db.relationship('OrdersStatuses', backref=db.backref('OrderedObjects', lazy=True))
 
     def __repr__(self):
         return f"Order('{self.client_id}', '{self.employee_id}', '{self.service_id}', '{self.status}', '{self.service_object_id}', '{self.order_date}', '{self.count}', '{self.price}')"

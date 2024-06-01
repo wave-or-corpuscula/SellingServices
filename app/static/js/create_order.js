@@ -1,5 +1,69 @@
-var itemsCount = 0;
 
+
+function createInputWithLabel(
+    inputId,
+    inputClasses = [],
+    inputType = "text",
+    inputValue = 0,
+    inputReadOnly = false,
+    labelClasses = [],
+    labelText
+) {
+    const newInput = document.createElement("input")
+    newInput.readOnly = inputReadOnly
+    newInput.id = inputId
+    newInput.type = inputType
+    newInput.value = inputValue;
+    for (let cls of inputClasses) {
+        newInput.classList.add(cls)
+    }
+
+    const newLabel = document.createElement("label")
+    for (let cls of labelClasses) {
+        newLabel.classList.add(cls)
+    }
+    newLabel.setAttribute("for", newInput.id)
+    newLabel.innerHTML = labelText
+
+    return [newInput, newLabel]
+}
+
+function createSelectWithLabel(
+    selectId,
+    selectClasses = [],
+    selectInnerHtml = "",
+    selectElements,
+    selectSelectedId,
+    labelClasses = [],
+    labelText
+) {
+
+    const newSelect = document.createElement("select");
+    newSelect.id = selectId;
+    for (let cls of selectClasses) {
+        newSelect.classList.add(cls);
+    }
+    newSelect.innerHTML = selectInnerHtml
+    selectElements.forEach(element => {
+        const option = document.createElement("option");
+        if (element.id == selectSelectedId) {
+            option.selected = true;
+        }
+        option.value = element.id;
+        option.textContent = element.name;
+        option.setAttribute("cost", element.cost);
+        newSelect.appendChild(option);
+    });
+
+    const newLabel = document.createElement("label")
+    for (let cls of labelClasses) {
+        newLabel.classList.add(cls)
+    }
+    newLabel.setAttribute("for", newSelect.id)
+    newLabel.innerHTML = labelText
+
+    return [newSelect, newLabel];
+}
 
 async function fillObjectCategoriesDiv(object_id, catsDiv, costDisplayInput, objectCost) {
     catsDiv.innerHTML = "";
@@ -12,58 +76,41 @@ async function fillObjectCategoriesDiv(object_id, catsDiv, costDisplayInput, obj
         for (let i = 0; i < objectCategories.length; i++) {
             const categoryDiv = document.createElement("div");
             categoryDiv.classList.add("service-object-category");
-            const categorySelect = document.createElement("select");
-            const newLabel = document.createElement("label");
-            newLabel.classList.add("form-label");
-            newLabel.setAttribute("for", objectCategories[i].id);
-            newLabel.innerHTML = objectCategories[i].name;
+            
             
             // Category cost input + label
-
-            const categoryCostInput = document.createElement("input")
-            categoryCostInput.readOnly = true
-            categoryCostInput.id = "category-cost"
-            categoryCostInput.type = "text"
-            categoryCostInput.value = 0;
-            categoryCostInput.classList.add("form-control", "mb-3")
-
-            const categoryCostInputLabel = document.createElement("label")
-            categoryCostInputLabel.classList.add("form-label");
-            categoryCostInputLabel.setAttribute("for", categoryCostInput.id)
-            categoryCostInputLabel.innerHTML = "Стоимость категории"
-
-            categorySelect.id = objectCategories[i].id;
-            categorySelect.textContent = objectCategories[i].name;
-            categorySelect.classList.add("form-control");
-            categoriesSubcats[i].forEach(element => {
-                const option = document.createElement("option");
-                option.value = element.id;
-                option.textContent = element.name;
-                option.setAttribute("cost", element.cost);
-                categorySelect.appendChild(option);
-            });
+            const [categoryCostInput, categoryCostInputLabel] = createInputWithLabel(
+                "category-cost", ["form-control", "mb-3"], "text", 0, true, ["form-label"], "Стоимость категории"
+            )
+            
+            // Category select + label
+            const [categorySelect, categorySelectLabel] = createSelectWithLabel(
+                objectCategories[i].id, ["form-control"], 
+                '<option value="" cost="0">Не выбрано</option>',
+                categoriesSubcats[i], undefined, ["form-label"], objectCategories[i].name
+            )
 
             categorySelect.addEventListener("change", function() {
-                categoryCostInput.value = categorySelect.options[categorySelect.selectedIndex].getAttribute("cost");
-                setOrderCost();
+                if (categorySelect.options[categorySelect.selectedIndex]) {
+                    categoryCostInput.value = categorySelect.options[categorySelect.selectedIndex].getAttribute("cost");
+                    setOrderCost();
+                }
             })
             categorySelect.dispatchEvent(new Event('change'));
 
-            categoryDiv.appendChild(newLabel);
+            categoryDiv.appendChild(categorySelectLabel);
             categoryDiv.appendChild(categorySelect);
             categoryDiv.appendChild(categoryCostInputLabel);
             categoryDiv.appendChild(categoryCostInput);
             
             catsDiv.appendChild(categoryDiv);
         }
-        
         costDisplayInput.value = objectCost;
         setOrderCost();
     });
 }
 
 async function addNewServiceObjectItem() {
-    itemsCount++;
     const allItemsDiv = document.getElementById("service_objects");
     const newItemDiv = document.createElement("div")
     const objectAndCategoriesDiv = document.createElement("div");
@@ -81,6 +128,7 @@ async function addNewServiceObjectItem() {
     .then((data) => {
         serviceObjectsSelect.innerHTML = '<option value="">Выберите вид услуги</option>';
         serviceObjectsSelect.classList.add("form-control");
+        serviceObjectsSelect.id = "objectsList";
         data.forEach(element => {
             const option = document.createElement("option");
             option.value = element.id;
@@ -90,22 +138,17 @@ async function addNewServiceObjectItem() {
         });
     });
     serviceObjectsSelect.addEventListener("change", function() {
-        fillObjectCategoriesDiv(serviceObjectsSelect.options[serviceObjectsSelect.selectedIndex].value, objectCategoriesDiv, objectCostInput, serviceObjectsSelect.options[serviceObjectsSelect.selectedIndex].getAttribute("cost")); 
+        if (serviceObjectsSelect.options[serviceObjectsSelect.selectedIndex]) {
+            fillObjectCategoriesDiv(serviceObjectsSelect.options[serviceObjectsSelect.selectedIndex].value, objectCategoriesDiv, objectCostInput, serviceObjectsSelect.options[serviceObjectsSelect.selectedIndex].getAttribute("cost")); 
+        }
     });
 
     // Object cost input
 
-    const objectCostInput = document.createElement("input")
-    objectCostInput.readOnly = true
-    objectCostInput.id = "object-cost"
-    objectCostInput.name = "object-cost"
-    objectCostInput.type = "text"
-    objectCostInput.value = 0;
-    objectCostInput.classList.add("form-control", "mb-3")
-    const objectCostInputLabel = document.createElement("label")
-    objectCostInputLabel.classList.add("form-label");
-    objectCostInputLabel.setAttribute("for", objectCostInput.id)
-    objectCostInputLabel.innerHTML = "Стоимость услуги"
+
+    const [objectCostInput, objectCostInputLabel] = createInputWithLabel(
+        "object-cost", ["form-control", "mb-3"], "text", 0, true, ["form-label"], "Стоимость услуги"
+    )
 
     // Remove button
     
@@ -116,31 +159,24 @@ async function addNewServiceObjectItem() {
     removeButton.addEventListener("click", () => { 
         newItemDiv.remove(); 
         setOrderCost();
-        itemsCount--;
     });
 
 
     // Objects count input + label
 
-    const countInput = document.createElement("input");
-    countInput.type = "text";
-    countInput.id = "count-input"
-    countInput.classList.add("form-control", "mb-3");
+    const [countInput, countInputLabel] = createInputWithLabel(
+        "objectsCount", ["form-control", "mb-3"], "text", 1, false, ["form-label"], "Количество"
+    )
     countInput.addEventListener("input", function() {
         setOrderCost();
     });
-
-    const inputLabel = document.createElement("label");
-    inputLabel.classList.add("form-label");
-    inputLabel.setAttribute("for", countInput.id);
-    inputLabel.innerHTML = "Количество";
     
     objectAndCategoriesDiv.appendChild(serviceObjectsSelect);
     objectAndCategoriesDiv.appendChild(objectCostInputLabel);
     objectAndCategoriesDiv.appendChild(objectCostInput);
     objectAndCategoriesDiv.appendChild(objectCategoriesDiv);
     newItemDiv.appendChild(objectAndCategoriesDiv);
-    newItemDiv.appendChild(inputLabel);
+    newItemDiv.appendChild(countInputLabel);
     newItemDiv.appendChild(countInput);
     newItemDiv.appendChild(removeButton);
     allItemsDiv.appendChild(newItemDiv);
@@ -154,7 +190,7 @@ function setOrderCost() {
 
     serviceObjectsItems.forEach(serviceObjectsItem => {
         let objectWithServicesCost = 0;
-        let objectsCount = parseFloat(serviceObjectsItem.querySelector("#count-input").value);
+        let objectsCount = parseFloat(serviceObjectsItem.querySelector("#objectsCount").value);
         let objectCost = parseFloat(serviceObjectsItem.querySelector("#object-cost").value);
         objectWithServicesCost += objectCost
         const serviceObjectItems = serviceObjectsItem.querySelectorAll(".service-object-category");
@@ -173,16 +209,93 @@ function setOrderCost() {
     }
 }
 
+function displayMessage(message, category) {
+    const messageContainer = document.getElementById("messagesDivContainer")
+    messageContainer.innerHTML += 
+    `<div class="alert alert-${category} alert-dismissible fade show" role="alert">
+    ${message}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>`
+          
+}
+
 function collectAllObjectsData() {
     const serviceObjectsItems = Array.from(document.getElementsByClassName("service-object-item"));
-    // let objectData = {
-    //     "object_id": 1,
-    //     "object_categories":
-    // }
+
+    let orderInfo = {
+        clientId: parseInt(document.getElementById("clientId").innerText),
+        serviceId: parseInt(document.getElementById("serviceId").innerText),
+        deliveryDate: document.getElementById("deliveryDate").value,
+        objects: []
+    }
+
+    // const orderedObjectsList = [];
+    serviceObjectsItems.forEach(serviceObjectsItem => {
+        orderInfo.objects.push({
+            objectId: parseInt(serviceObjectsItem.querySelector("#objectsList").value),
+            objectAmount: serviceObjectsItem.querySelector("#objectsCount").value,
+            objectCategories: getCatsListFromObjectItem(serviceObjectsItem),
+            objectSubCategories: getSubCatsListFromObjectItem(serviceObjectsItem),
+        })
+    })
+    return orderInfo;
+}
+
+function getCatsListFromObjectItem(objectItem) {
+    const categoryDivs = objectItem.querySelectorAll(".service-object-category");
+    const categorysList = [];
+    categoryDivs.forEach(catDiv => {
+        categorysList.push(parseInt(catDiv.getElementsByTagName("select")[0].id));
+    })
+
+    return categorysList;
+}
+
+function getSubCatsListFromObjectItem(objectItem) {
+    const subCategoryDivs = objectItem.querySelectorAll(".service-object-category");
+    const subCategorysList = [];
+    subCategoryDivs.forEach(catDiv => {
+        const subcatSelect = catDiv.getElementsByTagName("select")[0];
+            subcatId = parseInt(subcatSelect.options[subcatSelect.selectedIndex].value);
+            if (isNaN(subcatId)) {
+                subCategorysList.push(undefined);
+            }
+            else {
+                subCategorysList.push(subcatId);
+            }
+    })
+
+    return subCategorysList;
+}
+
+function sendOrderData(sendingStatus) {
+    let requestId = document.getElementById("requestId").innerText;
+
+    fetch(`/create_order/${requestId}`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            orderInfo: collectAllObjectsData(), 
+            status: sendingStatus
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        displayMessage(data.message, data.status);
+        if (data.url) {
+            document.location.href = data.url;
+        }
+    })
 }
 
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("add_service_object_but").addEventListener("click", addNewServiceObjectItem);
+    document.getElementById("create_order_but").addEventListener("click", function() {sendOrderData("create_order")});
+
     setOrderCost();
 })
 

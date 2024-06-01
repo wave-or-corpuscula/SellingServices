@@ -5,6 +5,7 @@ from datetime import date, datetime
 from flask import render_template, request, flash, redirect, url_for, Blueprint, session
 
 from app.models import *
+from app.employees.utils import ResponseToJS, OrderInfo
 
 employees = Blueprint("employees", __name__)
 
@@ -35,51 +36,82 @@ def create_order(request_id):
     service_objects = ServiceObjects.query.all()
 
     if request.method == 'POST':
-        if 'check_stock' in request.form:
-            service_object_id = request.form['service_object']
-            count = int(request.form['count'])
+        request_data = request.get_json().get("orderInfo")
+        request_status = request.get_json().get("status")
+        # if 'check_stock' in request.form:
+        #     service_object_id = request.form['service_object']
+        #     count = int(request.form['count'])
 
-            stock_item = StoreHouse.query.filter_by(object_id=service_object_id).first()
-            stock_count = stock_item.count if stock_item else 0
+        #     stock_item = StoreHouse.query.filter_by(object_id=service_object_id).first()
+        #     stock_count = stock_item.count if stock_item else 0
 
-            if stock_count >= count:
-                flash('Sufficient stock available.', 'success')
-            else:
-                flash(f'Insufficient stock. Missing {count - stock_count} units.', 'danger')
-            return render_template('employee/employee_create_order.html', request=order_request, service_objects=service_objects, checked=True, missing_count=count - stock_count if stock_count < count else 0)
-
-        elif 'create_order' in request.form:
-            count = request.form['count']
-            price = request.form['price']
-            delivery_date = request.form['delivery_date']
-
+        #     if stock_count >= count:
+        #         flash('Sufficient stock available.', 'success')
+        #     else:
+        #         flash(f'Insufficient stock. Missing {count - stock_count} units.', 'danger')
+        #     return render_template('employee/employee_create_order.html', request=order_request, service_objects=service_objects, checked=True, missing_count=count - stock_count if stock_count < count else 0)
+        
+        if request_status == "create_order":
+            try:
+                order_info = OrderInfo(request_data)
+            except Exception as e:
+                return jsonify(ResponseToJS(
+                    message=e.args[0],
+                    status="danger"
+                ).__dict__)
+            
             new_order = Orders(
-                client_id=order_request.client_id,
+                client_id=order_info.client_id,
                 employee_id=session.get('user_id'),
-                service_id=order_request.service_id,
-                status=1,  # Assuming 1 is the initial status for a new order
-                order_date=date.today(),
-                count=count,
-                price=price
+                service_id=order_info.service_id,
+                status=1,
+                order_date=date.today()
             )
 
             db.session.add(new_order)
             db.session.commit()
 
-            if delivery_date: 
+            if order_info.delivery_date: 
                 new_delivery = Delivery(
                     order_id=new_order.id,
-                    delivery_date=datetime.strptime(delivery_date, "%Y-%m-%d").date()
+                    delivery_date=order_info.delivery_date
                 )
 
                 db.session.add(new_delivery)
                 db.session.commit()
 
+            for ordered_object in order_info.objects:
+                new_object = OrderedObjects(
+                    order_id=new_order.id,
+                    object_id=ordered_object.id,
+                    count=ordered_object.amount
+                )
+
+                db.session.add(new_object)
+                db.session.commit()
+
+                for cat, subcat in zip(ordered_object.cats, ordered_object.subcats):
+                    new_ordered_categories = OrderedObjectCategories(
+                        order_id=new_order.id,
+                        object_id=ordered_object.id,
+                        cat_id=cat,
+                        subcat_id=subcat
+                    )
+                    db.session.add(new_ordered_categories)
+                    db.session.commit()
+
             OrderRequest.query.filter_by(id=request_id).delete()
             db.session.commit()
 
-            flash('Order created successfully!', 'success')
-            return redirect(url_for('employees.view_requests'))
+            flash('Заказ успешно создан!', 'success')
+            return jsonify(ResponseToJS(
+                    message="Заказ успешно создан!",
+                    status="success",
+                    url="/view_requests"
+                ).__dict__)
+
+
+            # return redirect(url_for('employees.view_requests'))
 
         elif 'create_request_for_missing_stock' in request.form:
             service_object_id = request.form['service_object']

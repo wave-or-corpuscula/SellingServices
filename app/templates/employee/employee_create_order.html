@@ -4,8 +4,10 @@
 <div class="container mt-5">
     <h2 class="mb-4">Обработка запроса</h2>
     <form method="POST">
+        <div id="requestId" style="display: none;">{{ request.id }}</div>
         <div class="mb-3">
             <label for="clientName" class="form-label">Имя клиента</label>
+            <div id="clientId" style="display: none;">{{ request.client.id }}</div>
             <input type="text" class="form-control" id="clientName" value="{{ request.client.full_name }}" readonly>
         </div>
         <div class="mb-3">
@@ -14,6 +16,7 @@
         </div>
         <div class="mb-3">
             <label for="serviceName" class="form-label">Услуга</label>
+            <div id="serviceId" style="display: none;">{{ request.service.id }}</div>
             <input type="text" class="form-control" id="serviceName" value="{{ request.service.service_name }}" readonly>
         </div>
         <div class="mb-3">
@@ -25,12 +28,7 @@
             <input type="date" class="form-control" id="deliveryDate" name="delivery_date">
         </div>
         <div id="service_objects" class="mb-3">
-            {# <label for="serviceObject" class="form-label">Вид услуги</label>
-            <select class="form-select" id="serviceObject" name="service_object" required>
-                {% for object in service_objects %}
-                <option value="{{ object.id }}">{{ object.object_name }}</option>
-                {% endfor %}
-            </select> #}
+            <!-- Place for dynamycally added objects -->
         </div>
         <div class="mb-3">
             <label for="totalPrice" class="form-label">Общая стоимость заказа</label>
@@ -38,7 +36,7 @@
         </div>
         <button type="button" id="add_service_object_but" name="add_service_object" class="btn btn-success">Добавить вид услуги</button>
         <button type="submit" name="check_stock" class="btn btn-secondary">Проверить на складе</button>
-        <button type="submit" name="create_order" class="btn btn-primary">Создать заказ</button>
+        <button type="button" id="create_order_but" name="create_order" class="btn btn-primary">Создать заказ</button>
 
         {% if checked %}
         <div class="mt-3">
