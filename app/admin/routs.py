@@ -85,8 +85,8 @@ def employees_stat():
         print(start_date, end_date)
 
         if start_date and end_date:
-            start_date = datetime.strptime(start_date, '%Y-%m-%d')
-            end_date = datetime.strptime(end_date, '%Y-%m-%d')
+            start_date = datetime.strptime(start_date, '%d-%m-%Y')
+            end_date = datetime.strptime(end_date, '%d-%m-%Y')
 
 
             chart_path = generate_employee_statistics_chart(start_date, end_date)
