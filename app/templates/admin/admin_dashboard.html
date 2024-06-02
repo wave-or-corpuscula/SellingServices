@@ -1,0 +1,17 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block content %}
+
+<div class="container mt-4" align="center">
+    <h2>Панель администратора</h2>
+    <div class="column">
+        <div class="col-md-4">
+            <a href="{{ url_for('admin.services_rating') }}" class="btn btn-primary btn-block mb-3">Рейтинг услуг</a>        
+        </div>
+        <div class="col-md-4">
+            <a href="{{ url_for('admin.employees_stat') }}" class="btn btn-primary btn-block mb-3">Статистика сотрудников</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

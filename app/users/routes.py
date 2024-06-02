@@ -78,5 +78,5 @@ def employee_dashboard():
     if session.get('role') == 'employee':
         return render_template('employee/dashboard_employee.html')
     elif session.get('role') == 'admin':
-        return render_template('admin/base_admin.html')
+        return redirect(url_for('admin.admin_dashboard'))#('admin/admin_dashboard.html')
     return redirect(url_for('users.login'))

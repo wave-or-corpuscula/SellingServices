@@ -1,0 +1,13 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block content %}
+
+<div class="container mt-4" align="center">
+    <h2>Рейтинг услуг</h2>
+    <div class="container">
+        <img src="{{ url_for('static', filename='img/service_frequency.png') }}" alt="График рейтинга услуг">
+    </div>
+    
+</div>
+
+{% endblock %}

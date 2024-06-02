@@ -1,0 +1,25 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h2 align="center">Статистика сотрудников</h2>
+    <form method="POST">
+        <div class="column">
+            <div class="mb-3">
+                <label for="startDate" class="form-label">Начало промежутка</label>
+                <input type="date" class="form-control" id="startDate" name="startDate">
+            </div>
+            <div class="mb-3"> 
+                <label for="endDate" class="form-label">Конец промежутка</label>
+                <input type="date" class="form-control" id="endDate" name="endDate">
+            </div>
+        </div>
+        <button type="submit" name="drawChart" class="btn btn-primary">Построить график</button>
+    </form>
+    {% if chart_path %}
+    <img src="{{ url_for('static', filename='img/employee_statistics.png') }}" alt="График">
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -1,8 +1,10 @@
-from flask import jsonify
-
 from datetime import date, datetime
 
+from flask import jsonify
+
 from flask import render_template, request, flash, redirect, url_for, Blueprint, session
+
+from docxtpl import DocxTemplate
 
 from app.models import *
 from app.employees.utils import ResponseToJS, OrderInfo
@@ -147,34 +149,6 @@ def order_details(order_id):
     service_objects = ServiceObjects.query.all()
     order_statuses = OrdersStatuses.query.all()
     delivery = Delivery.query.filter_by(order_id=order.id).first()
-    
-    if request.method == 'POST':
-        order.status = request.form['status']
-        order.order_date = request.form['order_date']
-        db.session.commit()
-
-        OrderedObjects.query.filter_by(order_id=order.id).delete()
-        
-        object_ids = request.form.getlist('object_id')
-        cat_ids = request.form.getlist('cat_id')
-        sub_cat_ids = request.form.getlist('sub_cat_id')
-        counts = request.form.getlist('count')
-        prices = request.form.getlist('price')
-
-        for i in range(len(object_ids)):
-            new_ordered_object = OrderedObjects(
-                order_id=order.id,
-                object_id=int(object_ids[i]),
-                cat_id=int(cat_ids[i]),
-                sub_cat_id=int(sub_cat_ids[i]),
-                count=int(counts[i]),
-                price=int(prices[i])
-            )
-            db.session.add(new_ordered_object)
-        db.session.commit()
-        
-        flash('Order updated successfully!', 'success')
-        return redirect(url_for('employee.order_details', order_id=order.id))
 
     return render_template(
         'employee/order_details.html',
@@ -239,10 +213,52 @@ def get_order_info(order_id: int):
     return jsonify(objects_info)
 
 
-@employees.route("/create_report")
-def create_report():
-    
+@employees.route("/create_report/<int:order_id>")
+def create_report(order_id: int):
+    try:
+        order = Orders.query.get(order_id)
+        doc = DocxTemplate("documents/template.docx")
 
+        objects = []
+        order_cost = order.service.cost
+        ordered_objs = OrderedObjects.query.filter_by(order_id=order.id)
+        for ordered_obj in ordered_objs:
+            object_cost = ordered_obj.object.cost
+            amount = ordered_obj.count
+            ord_objs_cats = OrderedObjectCategories.query.filter_by(order_id=order.id, object_id=ordered_obj.object_id)
+            subcats_list = []
+            for ord_obj_cats in ord_objs_cats:
+                if ord_obj_cats.subcategory:
+                    subcats_list.append(ord_obj_cats.subcategory.subcat_name)
+                    object_cost += ord_obj_cats.subcategory.cost
+            objects.append({
+                "name": f"{ordered_obj.object.object_name}: {', '.join(subcats_list)}",
+                "col": amount,
+                "one": object_cost,
+                "all": object_cost * amount
+            })
+            order_cost += object_cost * amount
+
+        context = {
+            "order_id": order_id,
+            "order_date": order.order_date,
+            "employee_name": order.employee.full_name,
+            "client_name": order.client.full_name,
+            "objects": objects,
+            "total_price": order_cost,
+            "service_name": order.service.service_name
+        }
+
+        # Рендеринг шаблона
+        doc.render(context)
+        doc_name = f"Отчет по заказу {order_id}.docx"
+        doc.save(f"documents/{doc_name}")
+        flash(f"Договор '{doc_name}' создан.", "success")
+    except Exception as e:
+        print(e)
+        flash("Ошибка при создании отчета", "danger")
+
+    return redirect(url_for("employees.employee_orders"))
 
 def create_complete_order(request_data):
     order_info = OrderInfo(request_data)

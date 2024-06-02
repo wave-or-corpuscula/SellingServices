@@ -22,7 +22,10 @@
                 <td>{{ order.service_name }}</td>
                 <td>{{ order.order_date }}</td>
                 <td>{{ order.status }}</td>
-                <td><a href="{{ url_for('employees.order_details', order_id=order.id) }}" class="btn btn-primary btn-sm">Перейти</a></td>
+                <td>
+                    <a href="{{ url_for('employees.order_details', order_id=order.id) }}" class="btn btn-primary btn-sm">Перейти</a>
+                    <a href="{{ url_for('employees.create_report', order_id=order.id) }}" class="btn btn-outline-info btn-sm">Оформить отчет</a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
