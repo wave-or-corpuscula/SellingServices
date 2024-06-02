@@ -65,7 +65,7 @@ def generate_employee_statistics_chart(start_date, end_date):
     plt.bar(employee_names, order_counts, color='skyblue')
     plt.xlabel('Сотрудник')
     plt.ylabel('Количество заказов')
-    plt.title(f'Количество заказов по сотрудникам\nс {start_date.strftime("%Y-%m-%d")} по {end_date.strftime("%Y-%m-%d")}')
+    plt.title(f'Количество заказов по сотрудникам\nс {start_date.strftime('%d-%m-%Y')} по {end_date.strftime('%d-%m-%Y')}')
     plt.xticks(rotation=45, ha='right')
     plt.tight_layout()
 
@@ -85,8 +85,8 @@ def employees_stat():
         print(start_date, end_date)
 
         if start_date and end_date:
-            start_date = datetime.strptime(start_date, '%d-%m-%Y')
-            end_date = datetime.strptime(end_date, '%d-%m-%Y')
+            start_date = datetime.strptime(start_date, "%Y-%m-%d")
+            end_date = datetime.strptime(end_date, "%Y-%m-%d")
 
 
             chart_path = generate_employee_statistics_chart(start_date, end_date)
