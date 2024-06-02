@@ -1,9 +1,0 @@
-{% for object_cateory, cat_subcats in object_categories|zip(category_subcats) %}
-    <h3>{{ object_cateory.category.cat_name }}</h3>
-    <select class="form-select" id="serviceObject" name="service_object" required>
-        {% for csub in cat_subcats %}
-        <option value="{{ csub.id }}">{{ csub.subcat_name }}</option>
-        {% endfor %}
-    </select>
-    <br>
-{% endfor %}

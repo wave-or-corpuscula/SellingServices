@@ -2,11 +2,15 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Изменить сервис</h2>
+    <h2>Изменить услугу</h2>
     <form method="POST" action="{{ url_for('admin.update_service', service_id=service.id) }}">
         <div class="form-group">
-            <label for="service_name">Название сервиса</label>
+            <label for="service_name">Название услуги</label>
             <input type="text" class="form-control" id="service_name" name="service_name" value="{{ service.service_name }}" required>
+        </div>
+        <div class="form-group">
+            <label for="service_cost">Стоимость услуги</label>
+            <input type="text" class="form-control" id="service_cost" name="service_cost" value="{{ service.cost }}" required>
         </div>
         <button type="submit" class="btn btn-primary">Сохранить</button>
     </form>

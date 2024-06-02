@@ -8,6 +8,7 @@
             <tr>
                 <th>ID</th>
                 <th>Название вида услуги</th>
+                <th>Стоимость</th>
                 <th>Действия</th>
             </tr>
         </thead>
@@ -16,6 +17,7 @@
             <tr>
                 <td>{{ service_object.id }}</td>
                 <td>{{ service_object.object_name }}</td>
+                <td>{{ service_object.cost }}</td>
                 <td>
                     <a href="{{ url_for('admin.edit_service_object_form', service_object_id=service_object.id) }}" class="btn btn-warning btn-sm">Изменить</a>
                     <form action="{{ url_for('admin.delete_service_object', service_object_id=service_object.id) }}" method="POST" style="display:inline;">

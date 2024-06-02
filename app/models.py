@@ -17,7 +17,7 @@ class Clients(db.Model):
 class Employees(db.Model):
     __tablename__ = 'Employees'
     id = db.Column(db.Integer, primary_key=True)
-    post_id = db.Column(db.Integer, db.ForeignKey('Posts.id'), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('Posts.id'))
     full_name = db.Column(db.String(150), nullable=False)
     telephone = db.Column(db.String(50), nullable=False)
     login = db.Column(db.String(150), unique=True, nullable=False)
@@ -41,10 +41,10 @@ class Posts(db.Model):
 class StoreHouse(db.Model):
     __tablename__ = 'StoreHouse'
     id = db.Column(db.Integer, primary_key=True)
-    object_id = db.Column(db.Integer, db.ForeignKey('ServiceObjects.id'), nullable=False)
+    object_id = db.Column(db.Integer, db.ForeignKey('ServiceObjects.id'))
     count = db.Column(db.Integer, nullable=False)
 
-    service_object = db.relationship("ServiceObjects", backref=db.backref("StoreHouse", lazy=True))
+    service_object = db.relationship("ServiceObjects", backref=db.backref("StoreHouse", lazy=True, cascade="all,delete"))
 
     def __repr__(self):
         return f"StoreHouse('{self.object_id}', '{self.count}')"
@@ -87,15 +87,17 @@ class Orders(db.Model):
     __tablename__ = 'Orders'
     id = db.Column(db.Integer, primary_key=True)
     client_id = db.Column(db.Integer, db.ForeignKey('Clients.id'), nullable=False)
-    employee_id = db.Column(db.Integer, db.ForeignKey('Employees.id'), nullable=False)
-    service_id = db.Column(db.Integer, db.ForeignKey('Services.id'), nullable=False)
-    status_id = db.Column(db.Integer, db.ForeignKey('OrdersStatuses.id'), nullable=False)
+    employee_id = db.Column(db.Integer, db.ForeignKey('Employees.id'))
+    service_id = db.Column(db.Integer, db.ForeignKey('Services.id'))
+    status_id = db.Column(db.Integer, db.ForeignKey('OrdersStatuses.id'))
     order_date = db.Column(db.Date, nullable=False)
 
     client = db.relationship('Clients', backref=db.backref('OrderedObjects', lazy=True))
     employee = db.relationship('Employees', backref=db.backref('OrderedObjects', lazy=True))
     service = db.relationship('Services', backref=db.backref('OrderedObjects', lazy=True))
     status = db.relationship('OrdersStatuses', backref=db.backref('OrderedObjects', lazy=True))
+    delivery = db.relationship('Delivery', cascade="all,delete", backref=db.backref('OrderedObjects', lazy=True))
+
 
     def __repr__(self):
         return f"Order('{self.client_id}', '{self.employee_id}', '{self.service_id}', '{self.status}', '{self.service_object_id}', '{self.order_date}', '{self.count}', '{self.price}')"
@@ -104,11 +106,12 @@ class Orders(db.Model):
 class OrderedObjects(db.Model):
     __tablename__ = 'OrderedObjects'
     id = db.Column(db.Integer, primary_key=True)
-    order_id = db.Column(db.Integer, db.ForeignKey('Orders.id'), nullable=False)
-    object_id = db.Column(db.Integer, db.ForeignKey('ServiceObjects.id'), nullable=False)
+    order_id = db.Column(db.Integer, db.ForeignKey('Orders.id'))
+    object_id = db.Column(db.Integer, db.ForeignKey('ServiceObjects.id'))
     count = db.Column(db.Integer, nullable=False)
 
-    object = db.relationship('ServiceObjects', backref=db.backref('OrderedObjects', lazy=True))
+    object = db.relationship('ServiceObjects', backref=db.backref('OrderedObjects', lazy=True, cascade="all,delete"))
+    order = db.relationship('Orders', backref=db.backref("OrderedObjects", cascade="all,delete", lazy=True))
 
 
 class OrderedObjectCategories(db.Model):
@@ -116,10 +119,10 @@ class OrderedObjectCategories(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey("Orders.id"), nullable=False)
     object_id = db.Column(db.Integer, db.ForeignKey("ServiceObjects.id"), nullable=False)
-    cat_id = db.Column(db.Integer, db.ForeignKey("Categories.id"), nullable=False)
+    cat_id = db.Column(db.Integer, db.ForeignKey("Categories.id"))
     subcat_id = db.Column(db.Integer, db.ForeignKey("SubCategories.id"))
 
-    order = db.relationship("Orders", backref=db.backref("OrderedObjectCategories", lazy=True))
+    order = db.relationship("Orders", backref=db.backref("OrderedObjectCategories", lazy=True, cascade="all,delete"))
     object = db.relationship("ServiceObjects", backref=db.backref("OrderedObjectCategories", lazy=True))
     subcategory = db.relationship("SubCategories", backref=db.backref("OrderedObjectCategories", lazy=True))
     category = db.relationship("Categories", backref=db.backref("OrderedObjectCategories", lazy=True))
@@ -128,8 +131,10 @@ class OrderedObjectCategories(db.Model):
 class Delivery(db.Model):
     __tablename__ = 'Delivery'
     id = db.Column(db.Integer, primary_key=True)
-    order_id = db.Column(db.Integer, db.ForeignKey('Orders.id'), nullable=False)
+    order_id = db.Column(db.Integer, db.ForeignKey('Orders.id'))
     delivery_date = db.Column(db.Date, nullable=False)
+
+    order = db.relationship("Orders", backref=db.backref("Delivery", lazy=True, cascade="all,delete"))
 
     def __repr__(self):
         return f"Delivery('{self.order_id}', '{self.delivery_date}')"
@@ -166,6 +171,10 @@ class ServiceObjects(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     object_name = db.Column(db.String(150), nullable=False)
     cost = db.Column(db.Float, nullable=False)
+
+    ordered_objects = db.relationship("OrderedObjects", cascade="all,delete", backref="ServiceObjects")
+    object_categories = db.relationship("ObjectsCategories", cascade="all,delete", backref="ServiceObjects")
+    ordered_object_categories = db.relationship("OrderedObjectCategories", cascade="all,delete", backref="ServiceObjects")
 
     def __repr__(self):
         return f"ServiceObject('{self.object_name}')"

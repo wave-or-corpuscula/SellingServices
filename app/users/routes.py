@@ -59,7 +59,7 @@ def login():
             session['role'] = 'admin' if employee.is_admin else 'employee'
             return redirect(url_for('users.employee_dashboard'))
         else:
-            flash('Login unsuccessful. Please check username and password', 'danger')
+            flash('Вход не удался. Проверьте имя пользователя или пароль', 'danger')
     return render_template('auth_login.html', form=form)
 
 @users.route('/logout')

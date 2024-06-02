@@ -137,6 +137,7 @@ async function addNewServiceObjectItem() {
             serviceObjectsSelect.appendChild(option);
         });
     });
+    
     serviceObjectsSelect.addEventListener("change", function() {
         if (serviceObjectsSelect.options[serviceObjectsSelect.selectedIndex]) {
             fillObjectCategoriesDiv(serviceObjectsSelect.options[serviceObjectsSelect.selectedIndex].value, objectCategoriesDiv, objectCostInput, serviceObjectsSelect.options[serviceObjectsSelect.selectedIndex].getAttribute("cost")); 
@@ -144,14 +145,11 @@ async function addNewServiceObjectItem() {
     });
 
     // Object cost input
-
-
     const [objectCostInput, objectCostInputLabel] = createInputWithLabel(
         "object-cost", ["form-control", "mb-3"], "text", 0, true, ["form-label"], "Стоимость услуги"
     )
 
     // Remove button
-    
     const removeButton = document.createElement("button");
     removeButton.classList.add("btn", "btn-danger", "mb-3");
     removeButton.type = "button";
@@ -160,7 +158,6 @@ async function addNewServiceObjectItem() {
         newItemDiv.remove(); 
         setOrderCost();
     });
-
 
     // Objects count input + label
 
@@ -223,10 +220,12 @@ function displayMessage(message, category) {
 
 function collectAllObjectsData() {
     const serviceObjectsItems = Array.from(document.getElementsByClassName("service-object-item"));
+    const statusSelect = document.getElementById("statusIdSelect")
 
     let orderInfo = {
         clientId: parseInt(document.getElementById("clientId").innerText),
         serviceId: parseInt(document.getElementById("serviceId").innerText),
+        statusId: parseInt(statusSelect.options[statusSelect.selectedIndex].value),
         deliveryDate: document.getElementById("deliveryDate").value,
         objects: []
     }

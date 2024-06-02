@@ -20,13 +20,6 @@ def view_requests():
     
     return render_template('employee/employee_view_requests.html', requests=requests)
 
-@employees.route('/view_orders')
-def view_orders():
-    if session.get('role') not in ['employee', 'admin']:
-        return redirect(url_for('users.login'))
-    # Логика для получения и отображения заказов
-    return render_template('employee/employee_view_orders.html')
-
 @employees.route('/create_order/<int:request_id>', methods=['GET', 'POST'])
 def create_order(request_id):
     if session.get('role') not in ['employee', 'admin']:
@@ -34,6 +27,7 @@ def create_order(request_id):
 
     order_request = OrderRequest.query.get_or_404(request_id)
     service_objects = ServiceObjects.query.all()
+    order_statuses = OrdersStatuses.query.all()
 
     if request.method == 'POST':
         request_data = request.get_json().get("orderInfo")
@@ -53,52 +47,12 @@ def create_order(request_id):
         
         if request_status == "create_order":
             try:
-                order_info = OrderInfo(request_data)
+                create_complete_order(request_data)
             except Exception as e:
                 return jsonify(ResponseToJS(
                     message=e.args[0],
                     status="danger"
                 ).__dict__)
-            
-            new_order = Orders(
-                client_id=order_info.client_id,
-                employee_id=session.get('user_id'),
-                service_id=order_info.service_id,
-                status=1,
-                order_date=date.today()
-            )
-
-            db.session.add(new_order)
-            db.session.commit()
-
-            if order_info.delivery_date: 
-                new_delivery = Delivery(
-                    order_id=new_order.id,
-                    delivery_date=order_info.delivery_date
-                )
-
-                db.session.add(new_delivery)
-                db.session.commit()
-
-            for ordered_object in order_info.objects:
-                new_object = OrderedObjects(
-                    order_id=new_order.id,
-                    object_id=ordered_object.id,
-                    count=ordered_object.amount
-                )
-
-                db.session.add(new_object)
-                db.session.commit()
-
-                for cat, subcat in zip(ordered_object.cats, ordered_object.subcats):
-                    new_ordered_categories = OrderedObjectCategories(
-                        order_id=new_order.id,
-                        object_id=ordered_object.id,
-                        cat_id=cat,
-                        subcat_id=subcat
-                    )
-                    db.session.add(new_ordered_categories)
-                    db.session.commit()
 
             OrderRequest.query.filter_by(id=request_id).delete()
             db.session.commit()
@@ -130,7 +84,10 @@ def create_order(request_id):
             flash('Request for missing stock created successfully!', 'success')
             return redirect(url_for('employees.view_requests'))
 
-    return render_template('employee/employee_create_order.html', request=order_request, service_objects=service_objects)
+    return render_template('employee/employee_create_order.html', 
+                           request=order_request, 
+                           service_objects=service_objects,
+                           order_statuses=order_statuses)
 
 @employees.route('/employee_orders')
 def employee_orders():
@@ -144,7 +101,7 @@ def employee_orders():
     for order in orders:
         client = Clients.query.get(order.client_id)
         service = Services.query.get(order.service_id)
-        status = OrdersStatuses.query.get(order.status)
+        status = OrdersStatuses.query.get(order.status_id)
         orders_info.append({
             'id': order.id,
             'client_name': client.full_name,
@@ -156,43 +113,29 @@ def employee_orders():
     return render_template('employee/employee_orders.html', orders=orders_info)
 
 
-@employees.route('/order/<int:order_id>', methods=['GET', 'POST'])
-def view_order(order_id):
-    if session.get('role') not in ['employee', 'admin']:
-        return redirect(url_for('users.login'))
-
-    order = Orders.query.get_or_404(order_id)
-    client = Clients.query.get(order.client_id)
-    service = Services.query.get(order.service_id)
-    service_objects = ServiceObjects.query.all()
-    statuses = OrdersStatuses.query.all()
-    delivery = Delivery.query.filter_by(order_id=order_id).first()
-
-    if request.method == 'POST':
-        new_status = request.form['status']
-        new_delivery_date = request.form['delivery_date']
-        new_count = request.form['count']
-        new_price = request.form['price']
-        new_service_object_id = request.form['service_object_id']
+@employees.route("/update_order/<int:order_id>", methods=['GET', 'POST'])
+def update_order(order_id: int):
+    if request.method == "POST":
+        request_data = request.get_json().get("orderInfo")
         
-        order.status = new_status
-        order.count = new_count
-        order.price = new_price
-        order.service_object_id = new_service_object_id
-
-        if new_delivery_date:
-            new_delivery_date = datetime.strptime(new_delivery_date, "%Y-%m-%d").date()
-            if delivery:
-                delivery.delivery_date = new_delivery_date
-            else:
-                new_delivery = Delivery(order_id=order_id, delivery_date=new_delivery_date)
-                db.session.add(new_delivery)
-        
+        order_to_delete = db.session.query(Orders).get(order_id)
+        db.session.delete(order_to_delete)
         db.session.commit()
-        flash('Order details updated successfully!', 'success')
-        return redirect(url_for('employees.view_order', order_id=order_id))
 
-    return render_template('employee/employee_order_detail.html', order=order, client=client, service=service, service_objects=service_objects, statuses=statuses, delivery=delivery)
+        try:
+            create_complete_order(request_data)
+        except Exception as e:
+            return jsonify(ResponseToJS(
+                message=e.args[0],
+                status="danger"
+            ).__dict__)
+
+        flash('Заказ успешно обновлен!', 'success')
+        return jsonify(ResponseToJS(
+                message="Заказ успешно обновлен!",
+                status="success",
+                url="/employee_orders"
+            ).__dict__)
 
 
 @employees.route('/employee/order/<int:order_id>', methods=['GET', 'POST'])
@@ -203,6 +146,7 @@ def order_details(order_id):
     ordered_objects = OrderedObjects.query.filter_by(order_id=order.id).all()
     service_objects = ServiceObjects.query.all()
     order_statuses = OrdersStatuses.query.all()
+    delivery = Delivery.query.filter_by(order_id=order.id).first()
     
     if request.method == 'POST':
         order.status = request.form['status']
@@ -237,7 +181,8 @@ def order_details(order_id):
         order=order,
         ordered_objects=ordered_objects,
         service_objects=service_objects,
-        order_statuses=order_statuses
+        order_statuses=order_statuses,
+        delivery=delivery
     )
 
 @employees.route('/employee/load_categories/<int:object_id>')
@@ -249,22 +194,12 @@ def load_categories(object_id):
         categories.append({'id': category.id, 'name': category.cat_name})
     return jsonify(categories)
 
-@employees.route('/employee/load_subcategories/<int:category_id>')
-def load_subcategories(category_id):
-    subcategories = SubCategories.query.filter_by(cat_id=category_id).all()
-    subcat_list = [{'id': subcat.id, 'name': subcat.subcat_name} for subcat in subcategories]
-    return jsonify(subcat_list)
 
 @employees.route('/employee/load_service_objects')
 def load_service_objects():
     service_objects = ServiceObjects.query.all()
     serv_objs_list = [{'id': so.id, 'name': so.object_name, 'cost': so.cost} for so in service_objects]
     return jsonify(serv_objs_list)
-
-@employees.route('/get_service_objects_list')
-def get_service_objects_list():
-    so = ServiceObjects.query.all()
-    return jsonify({"html": render_template("employee/service_objects_list.html", service_objects=so)})
 
 
 @employees.route("/get_object_categories/")
@@ -286,7 +221,68 @@ def get_object_categories(object_id):
             category_subcats.append([{"id": cs.id, "name": cs.subcat_name, "cost": cs.cost} for cs in cat_subcats])
     return jsonify({"object_categories": object_categories, "category_subcategories": category_subcats}) 
 
-@employees.route("/get_service_object_item/<int:object_index>")
-def get_service_object_item(object_index: int):
-    return render_template("employee/service_object_item.html", service_object_id=object_index)
 
+@employees.route("/get_order_info/<int:order_id>")
+def get_order_info(order_id: int):
+    order = Orders.query.get_or_404(order_id)
+    objects_info = []
+    ordered_objects = OrderedObjects.query.filter_by(order_id=order.id)
+    for obj in ordered_objects:
+        ord_obj_cats = OrderedObjectCategories.query.filter_by(order_id=order.id, object_id=obj.object_id)
+        
+        objects_info.append({
+            "object": obj.object_id, 
+            "cats": [cat.cat_id for cat in ord_obj_cats], 
+            "subcats": [cat.subcat_id for cat in ord_obj_cats]
+            })
+    
+    return jsonify(objects_info)
+
+
+@employees.route("/create_report")
+def create_report():
+    
+
+
+def create_complete_order(request_data):
+    order_info = OrderInfo(request_data)
+    
+    new_order = Orders(
+        client_id=order_info.client_id,
+        employee_id=session.get('user_id'),
+        service_id=order_info.service_id,
+        status_id=order_info.status_id,
+        order_date=date.today()
+    )
+
+    db.session.add(new_order)
+    db.session.commit()
+
+    if order_info.delivery_date: 
+        new_delivery = Delivery(
+            order_id=new_order.id,
+            delivery_date=order_info.delivery_date
+        )
+
+        db.session.add(new_delivery)
+        db.session.commit()
+
+    for ordered_object in order_info.objects:
+        new_object = OrderedObjects(
+            order_id=new_order.id,
+            object_id=ordered_object.id,
+            count=ordered_object.amount
+        )
+
+        db.session.add(new_object)
+        db.session.commit()
+
+        for cat, subcat in zip(ordered_object.cats, ordered_object.subcats):
+            new_ordered_categories = OrderedObjectCategories(
+                order_id=new_order.id,
+                object_id=ordered_object.id,
+                cat_id=cat,
+                subcat_id=subcat
+            )
+            db.session.add(new_ordered_categories)
+            db.session.commit()

@@ -6,6 +6,7 @@ class OrderInfo:
     def __init__(self, order_info: dict):
         self.client_id = order_info["clientId"]
         self.service_id = order_info["serviceId"]
+        self.status_id = order_info["statusId"]
         self.delivery_date = datetime.strptime(order_info["deliveryDate"], "%Y-%m-%d").date() if order_info["deliveryDate"] else None
         self.objects = [ObjectInfo(object_inf) for object_inf in order_info["objects"]]
 
@@ -32,7 +33,7 @@ class ObjectInfo:
 
 class ResponseToJS:
 
-    def __init__(self, message: str, status: str, data = None, url = None):
+    def __init__(self, message: str = None, status: str = None, data = None, url = None):
         self.message = message
         self.status = status
         self.data = data

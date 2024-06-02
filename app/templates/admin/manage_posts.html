@@ -1,13 +1,13 @@
 {% extends "admin/base_admin.html" %}
 {% block content %}
 <div class="container mt-4">
-    <h2>Управление постами</h2>
+    <h2>Управление должностями</h2>
     <a href="{{ url_for('admin.add_post_form') }}" class="btn btn-primary mb-3">Добавить пост</a>
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Название поста</th>
+                <th>Название должности</th>
                 <th>Действия</th>
             </tr>
         </thead>

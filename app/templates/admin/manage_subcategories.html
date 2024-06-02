@@ -7,18 +7,20 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>#</th>
                 <th>Категория</th>
                 <th>Название подкатегории</th>
+                <th>Стоимость</th>
                 <th>Действия</th>
             </tr>
         </thead>
         <tbody>
             {% for subcategory in subcategories %}
             <tr>
-                <td>{{ subcategory.id }}</td>
+                <td>{{ loop.index }}</td>
                 <td>{{ subcategory.category.cat_name }}</td>
                 <td>{{ subcategory.subcat_name }}</td>
+                <td>{{ subcategory.cost }}</td>
                 <td>
                     <a href="{{ url_for('admin.edit_subcategory_form', subcat_id=subcategory.id) }}" class="btn btn-warning btn-sm">Изменить</a>
                     <form action="{{ url_for('admin.delete_subcategory', subcat_id=subcategory.id) }}" method="POST" style="display:inline;">

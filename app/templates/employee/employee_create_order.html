@@ -27,6 +27,14 @@
             <label for="deliveryDate" class="form-label">Дата доставки</label>
             <input type="date" class="form-control" id="deliveryDate" name="delivery_date">
         </div>
+        <div class="form-group">
+            <label for="status">Статус</label>
+            <select class="form-control" id="statusIdSelect" name="status">
+                {% for status in order_statuses %}
+                <option value="{{ status.id }}">{{ status.status_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
         <div id="service_objects" class="mb-3">
             <!-- Place for dynamycally added objects -->
         </div>

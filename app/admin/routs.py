@@ -164,10 +164,11 @@ def add_service():
     if session.get('role') != 'admin':
         return redirect(url_for('users.login'))
     service_name = request.form.get('service_name')
-    new_service = Services(service_name=service_name)
+    service_cost = request.form.get('service_cost')
+    new_service = Services(service_name=service_name, cost=service_cost)
     db.session.add(new_service)
     db.session.commit()
-    flash('Сервис успешно добавлен!', 'success')
+    flash('Услуга успешно добавлена!', 'success')
     return redirect(url_for('admin.manage_services'))
 
 @admin.route('/admin/edit_service/<int:service_id>', methods=['GET'])
@@ -183,8 +184,9 @@ def update_service(service_id):
         return redirect(url_for('users.login'))
     service = Services.query.get_or_404(service_id)
     service.service_name = request.form.get('service_name')
+    service.cost = request.form.get('service_cost')
     db.session.commit()
-    flash('Сервис успешно обновлен!', 'success')
+    flash('Услуга успешно изменена!', 'success')
     return redirect(url_for('admin.manage_services'))
 
 @admin.route('/admin/delete_service/<int:service_id>', methods=['POST'])
@@ -194,7 +196,7 @@ def delete_service(service_id):
     service = Services.query.get_or_404(service_id)
     db.session.delete(service)
     db.session.commit()
-    flash('Сервис успешно удален!', 'success')
+    flash('Услуга успешно удалена!', 'success')
     return redirect(url_for('admin.manage_services'))
 
 ##########   SERVICES ROUTS    ##########
@@ -216,7 +218,7 @@ def add_status():
         status = OrdersStatuses(status_name=form.status_name.data)
         db.session.add(status)
         db.session.commit()
-        flash('Status added successfully!', 'success')
+        flash('Статус успешно добавлен!', 'success')
         return redirect(url_for('admin.manage_statuses'))
     return render_template('admin/add_status.html', form=form)
 
@@ -229,7 +231,7 @@ def edit_status(id):
     if form.validate_on_submit():
         status.status_name = form.status_name.data
         db.session.commit()
-        flash('Status updated successfully!', 'success')
+        flash('Статус успешно обновлен!', 'success')
         return redirect(url_for('admin.manage_statuses'))
     return render_template('admin/edit_status.html', form=form, status=status)
 
@@ -240,7 +242,7 @@ def delete_status(id):
     status = OrdersStatuses.query.get_or_404(id)
     db.session.delete(status)
     db.session.commit()
-    flash('Status deleted successfully!', 'success')
+    flash('Статус успешно удален!', 'success')
     return redirect(url_for('admin.manage_statuses'))
 
 
@@ -267,7 +269,8 @@ def add_service_object():
     if session.get('role') != 'admin':
         return redirect(url_for('users.login'))
     object_name = request.form.get('object_name')
-    new_service_object = ServiceObjects(object_name=object_name)
+    object_cost = request.form.get('object_cost')
+    new_service_object = ServiceObjects(object_name=object_name, cost=object_cost)
     db.session.add(new_service_object)
     db.session.commit()
     flash('Объект сервиса успешно добавлен!', 'success')
@@ -288,6 +291,7 @@ def update_service_object(service_object_id):
         return redirect(url_for('users.login'))
     service_object = ServiceObjects.query.get_or_404(service_object_id)
     service_object.object_name = request.form.get('object_name')
+    service_object.cost = request.form.get('object_cost')
     db.session.commit()
     flash('Объект сервиса успешно обновлен!', 'success')
     return redirect(url_for('admin.manage_service_objects'))
@@ -333,7 +337,7 @@ def add_post():
     new_post = Posts(post_name=post_name)
     db.session.add(new_post)
     db.session.commit()
-    flash('Пост успешно добавлен!', 'success')
+    flash('Должность успешно добавлена!', 'success')
     return redirect(url_for('admin.manage_posts'))
 
 # Форма изменения поста
@@ -352,7 +356,7 @@ def update_post(post_id):
     post = Posts.query.get_or_404(post_id)
     post.post_name = request.form.get('post_name')
     db.session.commit()
-    flash('Пост успешно обновлен!', 'success')
+    flash('Должность успешно изменена!', 'success')
     return redirect(url_for('admin.manage_posts'))
 
 # Удаление поста
@@ -363,7 +367,7 @@ def delete_post(post_id):
     post = Posts.query.get_or_404(post_id)
     db.session.delete(post)
     db.session.commit()
-    flash('Пост успешно удален!', 'success')
+    flash('Должность успешно удалена!', 'success')
     return redirect(url_for('admin.manage_posts'))
 
 ##########   POSTS ROUTS   ##########
@@ -385,7 +389,7 @@ def add_category():
     new_category = Categories(cat_name=cat_name)
     db.session.add(new_category)
     db.session.commit()
-    flash('Category added successfully!', 'success')
+    flash('Категория успешно добавлена!', 'success')
     return redirect(url_for('admin.manage_categories'))
 
 @admin.route('/admin/edit_category/<int:category_id>')
@@ -402,7 +406,7 @@ def update_category(category_id):
     category = Categories.query.get_or_404(category_id)
     category.cat_name = request.form.get('cat_name')
     db.session.commit()
-    flash('Category updated successfully!', 'success')
+    flash('Категория успешно изменена!', 'success')
     return redirect(url_for('admin.manage_categories'))
 
 @admin.route('/admin/delete_category/<int:category_id>')
@@ -412,7 +416,7 @@ def delete_category(category_id):
     category = Categories.query.get_or_404(category_id)
     db.session.delete(category)
     db.session.commit()
-    flash('Category deleted successfully!', 'success')
+    flash('Категория успешно удалена!', 'success')
     return redirect(url_for('admin.manage_categories'))
 
 ######### CATEGORIES ROUTS #########
@@ -568,7 +572,8 @@ def add_subcategory():
         return redirect(url_for('users.login'))
     subcat_name = request.form.get('subcat_name')
     cat_id = request.form.get('cat_id')
-    new_subcategory = SubCategories(subcat_name=subcat_name, cat_id=cat_id)
+    cost = request.form.get('subcat_cost')
+    new_subcategory = SubCategories(subcat_name=subcat_name, cat_id=cat_id, cost=cost)
     db.session.add(new_subcategory)
     db.session.commit()
     flash('Подкатегория успешно добавлена!', 'success')
@@ -591,6 +596,7 @@ def update_subcategory(subcat_id):
     subcategory = SubCategories.query.get_or_404(subcat_id)
     subcategory.subcat_name = request.form.get('subcat_name')
     subcategory.cat_id = request.form.get('cat_id')
+    subcategory.cost = request.form.get('subcat_cost')
     db.session.commit()
     flash('Подкатегория успешно обновлена!', 'success')
     return redirect(url_for('admin.manage_subcategories'))

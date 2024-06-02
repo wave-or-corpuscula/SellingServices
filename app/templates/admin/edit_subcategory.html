@@ -16,6 +16,11 @@
                 {% endfor %}
             </select>
         </div>
+        <div class="form-group">
+            <label for="subcat_cost">Стоимость подкатегории</label>
+            <input type="text" class="form-control" id="subcat_cost" name="subcat_cost" value="{{ subcategory.cost }}" required>
+        </div>
+    </div>
         <button type="submit" class="btn btn-primary">Сохранить изменения</button>
     </form>
 </div>
