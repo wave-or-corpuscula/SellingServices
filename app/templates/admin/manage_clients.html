@@ -2,6 +2,10 @@
 {% block content %}
 <h2>Клиенты</h2>
 <a href="{{ url_for('admin.add_client') }}" class="btn btn-primary mb-3">Добавить клиента</a>
+<div class="mb-3">
+    <label for="searchInput" class="form-label">Поиск:</label>
+    <input type="text" id="searchInput" class="form-control" placeholder="Введите для поиска...">
+</div>
 <table class="table">
     <thead>
         <tr>

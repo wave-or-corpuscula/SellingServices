@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
     const searchInput = document.getElementById("searchInput");
-    const table = document.getElementById("postsTable");
+    const table = document.getElementsByTagName("table")[0];
     const tbody = table.getElementsByTagName("tbody")[0];
     const rows = tbody.getElementsByTagName("tr");
     const searchColumnIndex = 1; // Задайте индекс колонки для поиска (начиная с 0)
