@@ -1,35 +1,4 @@
-import re
-from sqlalchemy.types import TypeDecorator, Date
-from datetime import datetime
-
 from app import db
-
-
-class CustomDate(TypeDecorator):
-    impl = Date
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.storage_format = "%d.%m.%Y"
-        self.regexp = re.compile(r"(?P<day>\d{2})\.(?P<month>\d{2})\.(?P<year>\d{4})")
-
-    def process_bind_param(self, value, dialect):
-        if isinstance(value, datetime):
-            return value.strftime(self.storage_format)
-        elif isinstance(value, str):
-            match = self.regexp.match(value)
-            if match:
-                return value
-            else:
-                raise ValueError("Date string does not match format 'DD.MM.YYYY'")
-        elif isinstance(value, datetime.date):
-            return value.strftime(self.storage_format)
-        return value
-
-    def process_result_value(self, value, dialect):
-        if value is not None and isinstance(value, str):
-            return datetime.strptime(value, self.storage_format).date()
-        return value
 
 
 class Clients(db.Model):
@@ -96,7 +65,7 @@ class OrderRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     client_id = db.Column(db.Integer, db.ForeignKey('Clients.id'), nullable=False)
     service_id = db.Column(db.Integer, db.ForeignKey('Services.id'))
-    order_date = db.Column(CustomDate, nullable=False)
+    order_date = db.Column(db.Date, nullable=False)
 
     client = db.relationship('Clients', backref=db.backref('OrderRequest', lazy=True))
     service = db.relationship('Services', backref=db.backref('OrderRequest', lazy=True))
@@ -121,7 +90,7 @@ class Orders(db.Model):
     employee_id = db.Column(db.Integer, db.ForeignKey('Employees.id'))
     service_id = db.Column(db.Integer, db.ForeignKey('Services.id'))
     status_id = db.Column(db.Integer, db.ForeignKey('OrdersStatuses.id'))
-    order_date = db.Column(CustomDate, nullable=False)
+    order_date = db.Column(db.Date, nullable=False)
 
     client = db.relationship('Clients', backref=db.backref('OrderedObjects', lazy=True))
     employee = db.relationship('Employees', backref=db.backref('OrderedObjects', lazy=True))
@@ -163,7 +132,7 @@ class Delivery(db.Model):
     __tablename__ = 'Delivery'
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey('Orders.id'))
-    delivery_date = db.Column(CustomDate, nullable=False)
+    delivery_date = db.Column(db.Date, nullable=False)
 
     order = db.relationship("Orders", backref=db.backref("Delivery", lazy=True, cascade="all,delete"))
 

@@ -55,7 +55,7 @@ def new_client_request():
         db.session.add(new_order_request)
         db.session.commit()
         
-        flash('Запрос создан удачно!', 'success')
+        flash('Заявка успешно создана!', 'success')
         return redirect(url_for('clients.new_client_request'))
     
     services = Services.query.all()
@@ -84,5 +84,5 @@ def delete_request(request_id):
     db.session.delete(order)
     db.session.commit()
     
-    flash('Запрос удален.', 'success')
+    flash('Заявка удалена.', 'success')
     return redirect(url_for('clients.view_client_requests'))
