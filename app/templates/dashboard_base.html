@@ -9,6 +9,7 @@
     <script>
         function toggleMenu() {
             document.getElementById("sidebar").classList.toggle("active");
+            document.getElementById("mainContent").classList.toggle("active");
         }
     </script>
 </head>
@@ -23,26 +24,25 @@
             {% endblock %}
         </div>
     </div>
-    <main>
-        <div class="container mt-4">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                <div id="messagesDivContainer" class="alert alert-dismissible fade show" role="alert">
-                  {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                      {{ message }}
-                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
+    <main id="mainContent">
+        <!-- <div style="padding: 60px 20px 20px 20px"> -->
+            <div class="container mt-4">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    <div id="messagesDivContainer" class="alert alert-dismissible fade show" role="alert">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                    {% endfor %}
                     </div>
-                  {% endfor %}
-                </div>
-            {% endwith %}
-
-        </div>
-        <main>
-            {% block content %}
-            {% endblock %}
-        </main>
+                {% endwith %}
+            </div>
+                {% block content %}
+                {% endblock %}
+        <!-- </div> -->
     </main>
     <footer class="footer mt-auto py-3 bg-light">
         <div class="container">
