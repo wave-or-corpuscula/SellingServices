@@ -1,4 +1,8 @@
-from datetime import datetime
+from datetime import datetime, date
+
+from flask import session
+
+from app.models import *
 
 
 class OrderInfo:
@@ -38,3 +42,47 @@ class ResponseToJS:
         self.status = status
         self.data = data
         self.url = url
+
+
+def create_complete_order(request_data):
+    order_info = OrderInfo(request_data)
+    
+    new_order = Orders(
+        client_id=order_info.client_id,
+        employee_id=session.get('user_id'),
+        service_id=order_info.service_id,
+        status_id=order_info.status_id,
+        order_date=date.today()
+    )
+
+    db.session.add(new_order)
+    db.session.commit()
+
+    if order_info.delivery_date: 
+        new_delivery = Delivery(
+            order_id=new_order.id,
+            delivery_date=order_info.delivery_date
+        )
+
+        db.session.add(new_delivery)
+        db.session.commit()
+
+    for ordered_object in order_info.objects:
+        new_object = OrderedObjects(
+            order_id=new_order.id,
+            object_id=ordered_object.id,
+            count=ordered_object.amount
+        )
+
+        db.session.add(new_object)
+        db.session.commit()
+
+        for cat, subcat in zip(ordered_object.cats, ordered_object.subcats):
+            new_ordered_categories = OrderedObjectCategories(
+                order_id=new_order.id,
+                object_id=ordered_object.id,
+                cat_id=cat,
+                subcat_id=subcat
+            )
+            db.session.add(new_ordered_categories)
+            db.session.commit()

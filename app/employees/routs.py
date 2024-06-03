@@ -1,5 +1,3 @@
-from datetime import date, datetime
-
 from flask import jsonify
 
 from flask import render_template, request, flash, redirect, url_for, Blueprint, session
@@ -7,7 +5,7 @@ from flask import render_template, request, flash, redirect, url_for, Blueprint,
 from docxtpl import DocxTemplate
 
 from app.models import *
-from app.employees.utils import ResponseToJS, OrderInfo
+from app.employees.utils import ResponseToJS, create_complete_order
 
 employees = Blueprint("employees", __name__)
 
@@ -226,46 +224,3 @@ def create_report(order_id: int):
         flash("Ошибка при создании отчета", "danger")
 
     return redirect(url_for("employees.employee_orders"))
-
-def create_complete_order(request_data):
-    order_info = OrderInfo(request_data)
-    
-    new_order = Orders(
-        client_id=order_info.client_id,
-        employee_id=session.get('user_id'),
-        service_id=order_info.service_id,
-        status_id=order_info.status_id,
-        order_date=date.today()
-    )
-
-    db.session.add(new_order)
-    db.session.commit()
-
-    if order_info.delivery_date: 
-        new_delivery = Delivery(
-            order_id=new_order.id,
-            delivery_date=order_info.delivery_date
-        )
-
-        db.session.add(new_delivery)
-        db.session.commit()
-
-    for ordered_object in order_info.objects:
-        new_object = OrderedObjects(
-            order_id=new_order.id,
-            object_id=ordered_object.id,
-            count=ordered_object.amount
-        )
-
-        db.session.add(new_object)
-        db.session.commit()
-
-        for cat, subcat in zip(ordered_object.cats, ordered_object.subcats):
-            new_ordered_categories = OrderedObjectCategories(
-                order_id=new_order.id,
-                object_id=ordered_object.id,
-                cat_id=cat,
-                subcat_id=subcat
-            )
-            db.session.add(new_ordered_categories)
-            db.session.commit()
