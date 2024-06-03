@@ -37,7 +37,7 @@ def register():
         
         flash('Регистрация успешна! Теперь можете войти', "success")
         return redirect(url_for('users.login'))
-    return render_template('auth_register.html', form=form)
+    return render_template('user/auth_register.html', form=form)
 
 @users.route("/")
 @users.route('/login', methods=['GET', 'POST'])
@@ -60,7 +60,7 @@ def login():
             return redirect(url_for('users.employee_dashboard'))
         else:
             flash('Вход не удался. Проверьте имя пользователя или пароль', 'danger')
-    return render_template('auth_login.html', form=form)
+    return render_template('user/auth_login.html', form=form)
 
 @users.route('/logout')
 def logout():
@@ -71,7 +71,7 @@ def logout():
 def client_dashboard():
     if session.get('role') != 'client':
         return redirect(url_for('users.login'))
-    return render_template('dashboard_client.html')
+    return render_template('client/dashboard_client.html')
 
 @users.route('/employee_dashboard')
 def employee_dashboard():

@@ -13,6 +13,7 @@
                 <th scope="col">Дата оформления</th>
                 <th scope="col">Дата доставки</th>
                 <th scope="col">Телефон сотрудника</th>
+                <th scope="col">Стоимость</th>
                 <th scope="col">Статус</th>
             </tr>
         </thead>
@@ -24,6 +25,7 @@
                 <td>{{ order.order_date|kravchuk_date_format }}</td>
                 <td>{{ order.delivery_date if order.delivery_date else 'Не требуется' }}</td>
                 <td>{{ order.employee_telephone }}</td>
+                <td>{{ order.total_price }}</td>
                 <td>{{ order.status_name }}</td>
             </tr>
             {% endfor %}
