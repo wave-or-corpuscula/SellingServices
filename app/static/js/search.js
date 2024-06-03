@@ -1,19 +1,23 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const searchInput = document.getElementById("searchInput");
-    const table = document.getElementsByTagName("table")[0];
-    const tbody = table.getElementsByTagName("tbody")[0];
-    const rows = tbody.getElementsByTagName("tr");
-    const searchColumnIndex = 1; // Задайте индекс колонки для поиска (начиная с 0)
-
-    searchInput.addEventListener("keyup", function() {
-        const filter = searchInput.value.toLowerCase();
-
-        for (let row of rows) {
-            const cell = row.getElementsByTagName("td")[searchColumnIndex];
-            if (cell) {
-                const text = cell.textContent || cell.innerText;
-                row.style.display = text.toLowerCase().includes(filter) ? "" : "none";
+    function filterTable() {
+        var input, filter, table, tr, td, i, j, txtValue;
+        input = document.getElementById("searchInput");
+        filter = input.value.toLowerCase();
+        table = document.getElementsByTagName("table")[0];
+        tr = table.getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) {  // start from 1 to skip the header row
+            tr[i].style.display = "none";
+            td = tr[i].getElementsByTagName("td");
+            for (j = 0; j < td.length; j++) {
+                if (td[j]) {
+                    txtValue = td[j].textContent || td[j].innerText;
+                    if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                        break;
+                    }
+                }
             }
         }
-    });
+    }
+    searchInput.addEventListener("keyup", filterTable);
 });
