@@ -21,7 +21,7 @@
             <tr>
                 <td>{{ loop.index }}</td>
                 <td>{{ order.service_name }}</td>
-                <td>{{ order.order_date }}</td>
+                <td>{{ order.order_date|kravchuk_date_format }}</td>
                 <td>{{ order.delivery_date if order.delivery_date else 'Не требуется' }}</td>
                 <td>{{ order.employee_telephone }}</td>
                 <td>{{ order.status_name }}</td>

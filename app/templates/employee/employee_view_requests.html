@@ -26,7 +26,7 @@
                 <td>{{ request.service.service_name }}</td>
                 <td>{{ request.client.full_name }}</td>
                 <td>{{ request.client.telephone }}</td>
-                <td>{{ request.order_date }}</td>
+                <td>{{ request.order_date|kravchuk_date_format }}</td>
                 <td>
                     <a href="{{ url_for('employees.create_order', request_id=request.id) }}" class="btn btn-primary">Обработать</a>
                 </td>

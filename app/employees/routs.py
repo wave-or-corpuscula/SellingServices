@@ -19,7 +19,6 @@ def employee_dashboard():
 @employees.route('/view_requests')
 def view_requests():
     requests = OrderRequest.query.all()
-    
     return render_template('employee/employee_view_requests.html', requests=requests)
 
 @employees.route('/create_order/<int:request_id>', methods=['GET', 'POST'])
@@ -34,57 +33,25 @@ def create_order(request_id):
     if request.method == 'POST':
         request_data = request.get_json().get("orderInfo")
         request_status = request.get_json().get("status")
-        # if 'check_stock' in request.form:
-        #     service_object_id = request.form['service_object']
-        #     count = int(request.form['count'])
-
-        #     stock_item = StoreHouse.query.filter_by(object_id=service_object_id).first()
-        #     stock_count = stock_item.count if stock_item else 0
-
-        #     if stock_count >= count:
-        #         flash('Sufficient stock available.', 'success')
-        #     else:
-        #         flash(f'Insufficient stock. Missing {count - stock_count} units.', 'danger')
-        #     return render_template('employee/employee_create_order.html', request=order_request, service_objects=service_objects, checked=True, missing_count=count - stock_count if stock_count < count else 0)
-        
-        if request_status == "create_order":
-            try:
-                create_complete_order(request_data)
-            except Exception as e:
-                return jsonify(ResponseToJS(
-                    message=e.args[0],
-                    status="danger"
-                ).__dict__)
-
-            OrderRequest.query.filter_by(id=request_id).delete()
-            db.session.commit()
-
-            flash('Заказ успешно создан!', 'success')
+    
+        try:
+            create_complete_order(request_data)
+        except Exception as e:
             return jsonify(ResponseToJS(
-                    message="Заказ успешно создан!",
-                    status="success",
-                    url="/view_requests"
-                ).__dict__)
+                message=e.args[0],
+                status="danger"
+            ).__dict__)
 
+        OrderRequest.query.filter_by(id=request_id).delete()
+        db.session.commit()
 
-            # return redirect(url_for('employees.view_requests'))
+        flash('Заказ успешно создан!', 'success')
+        return jsonify(ResponseToJS(
+                message="Заказ успешно создан!",
+                status="success",
+                url="/view_requests"
+            ).__dict__)
 
-        elif 'create_request_for_missing_stock' in request.form:
-            service_object_id = request.form['service_object']
-            missing_count = int(request.form['missing_count'])
-
-            new_stock_request = StoreHouse(
-                object_id=service_object_id,
-                count=missing_count
-            )
-
-            db.session.add(new_stock_request)
-            db.session.commit()
-
-            # TODO: Сделать формирование word-документа на дополнительный товар
-
-            flash('Request for missing stock created successfully!', 'success')
-            return redirect(url_for('employees.view_requests'))
 
     return render_template('employee/employee_create_order.html', 
                            request=order_request, 

@@ -24,7 +24,7 @@
                 <td>{{ loop.index }}</td>
                 <td>{{ order.client_name }}</td>
                 <td>{{ order.service_name }}</td>
-                <td>{{ order.order_date }}</td>
+                <td>{{ order.order_date|kravchuk_date_format }}</td>
                 <td>{{ order.status }}</td>
                 <td>
                     <a href="{{ url_for('employees.order_details', order_id=order.id) }}" class="btn btn-primary btn-sm">Перейти</a>

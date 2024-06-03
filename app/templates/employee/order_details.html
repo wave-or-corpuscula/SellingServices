@@ -25,7 +25,7 @@
         </div>
         <div class="mb-3">
             <label for="deliveryDate" class="form-label">Дата доставки</label>
-            <input type="date" class="form-control" id="deliveryDate" name="delivery_date" value="{{ delivery.delivery_date }}">
+            <input type="date" class="form-control" id="deliveryDate" name="delivery_date" value="{{ delivery.delivery_date|kravchuk_date_format }}">
         </div>
         <div class="form-group">
             <div id="orderId" style="display: none;">{{ order.id }}</div>
@@ -46,22 +46,6 @@
         <button type="button" id="add_service_object_but" name="add_service_object" class="btn btn-success">Добавить вид услуги</button>
         <button type="submit" name="check_stock" class="btn btn-secondary">Проверить на складе</button>
         <button type="button" id="update_order" name="create_order" class="btn btn-primary">Обновить данные заказа</button>
-
-        {% if checked %}
-        <div class="mt-3">
-            {% if missing_count > 0 %}
-            <div class="alert alert-danger" role="alert">
-                Missing {{ missing_count }} units.
-            </div>
-            <button type="submit" name="create_request_for_missing_stock" class="btn btn-warning">Request Missing Stock</button>
-            <input type="hidden" name="missing_count" value="{{ missing_count }}">
-            {% else %}
-            <div class="alert alert-success" role="alert">
-                Sufficient stock available.
-            </div>
-            {% endif %}
-        </div>
-        {% endif %}
     </form>
 </div>
 

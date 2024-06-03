@@ -17,7 +17,7 @@
             <tr>
                 <td>{{ loop.index }}</td>
                 <td>{{ order.service.service_name }}</td>
-                <td>{{ order.order_date }}</td>
+                <td>{{ order.order_date|kravchuk_date_format }}</td>
                 <td>
                     <form action="{{ url_for('clients.delete_request', request_id=order.id) }}" method="post">
                         <button type="submit" class="btn btn-danger">Удалить</button>
