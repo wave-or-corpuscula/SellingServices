@@ -1,0 +1,25 @@
+{% extends "dashboard_base.html" %}
+
+{% block title %}Оформление услуг{% endblock %}
+
+{% block header %}
+<div class="header-content">
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <h1>Панель клиента</h1>
+    <h4 style="display: inline-block;margin: auto 20px auto auto;"><a href="{{ url_for('users.logout') }}" class="btn btn-secondary">Выход</a></h4>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<nav>
+    <ul>
+        <li><a href="{{ url_for('users.client_dashboard') }}">Главная</a></li>
+        <li><a href="{{ url_for('clients.new_client_request') }}">Оформить новую заявку</a></li>
+        <li><a href="{{ url_for('clients.view_client_requests') }}">Мои заявки</a></li>
+        <li><a href="{{ url_for('clients.view_client_orders') }}">Мои заказы</a></li>
+    </ul>
+</nav>
+{% endblock %}
+
+{% block content %}
+{% endblock %}

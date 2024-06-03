@@ -1,20 +1,8 @@
-{% extends "dashboard_base.html" %}
-
-{% block title %}Панель инструментов{% endblock %}
+{% extends "client/dashboard_client_base.html" %}
 
 {% block content %}
-<div class="container mt-4" align="center">
-    <h2>Панель инструментов</h2>
-    <div class="column">
-        <div class="col-md-4">
-            <a href="{{ url_for('clients.new_client_request') }}" class="btn btn-primary btn-block mb-3">Оформить новую заявку</a>        
-        </div>
-        <div class="col-md-4">
-            <a href="{{ url_for('clients.view_client_requests') }}" class="btn btn-primary btn-block mb-3">Мои заявки</a>
-        </div>
-        <div class="col-md-4">
-            <a href="{{ url_for('clients.view_client_orders') }}" class="btn btn-primary btn-block mb-3">Мои заказы</a>
-        </div>
-    </div>
-</div>
+
+<h2>Добро пожаловать в панель администрирования</h2>
+<p>Выберите категорию из меню слева, для продолжения работы.</p>
+
 {% endblock %}

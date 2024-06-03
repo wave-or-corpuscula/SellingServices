@@ -57,7 +57,7 @@ def create_complete_order(request_data):
 
     db.session.add(new_order)
     db.session.commit()
-
+    
     if order_info.delivery_date: 
         new_delivery = Delivery(
             order_id=new_order.id,

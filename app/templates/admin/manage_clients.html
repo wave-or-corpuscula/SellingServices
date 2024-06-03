@@ -1,36 +1,38 @@
-{% extends "admin/base_admin.html" %}
+{% extends 'admin/dashboard_admin_base.html' %}
 {% block content %}
-<h2>Клиенты</h2>
-<a href="{{ url_for('admin.add_client') }}" class="btn btn-primary mb-3">Добавить клиента</a>
-<div class="mb-3">
-    <label for="searchInput" class="form-label">Поиск:</label>
-    <input type="text" id="searchInput" class="form-control" placeholder="Введите для поиска...">
+<div class="container mt-4">
+    <h2>Клиенты</h2>
+    <a href="{{ url_for('admin.add_client') }}" class="btn btn-primary mb-3">Добавить клиента</a>
+    <div class="mb-3">
+        <label for="searchInput" class="form-label">Поиск:</label>
+        <input type="text" id="searchInput" class="form-control" placeholder="Введите для поиска...">
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Клиент</th>
+                <th>Адрес</th>
+                <th>Телефон</th>
+                <th>Имя пользователя</th>
+                <th>Действие</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for client in clients %}
+            <tr>
+                <td>{{ client.id }}</td>
+                <td>{{ client.full_name }}</td>
+                <td>{{ client.address }}</td>
+                <td>{{ client.telephone }}</td>
+                <td>{{ client.login }}</td>
+                <td>
+                    <a href="{{ url_for('admin.edit_client', id=client.id) }}" class="btn btn-warning btn-sm">Изменить</a>
+                    <a href="{{ url_for('admin.delete_client', id=client.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Вы точно хотите удалить клиента?');">Удалить</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
-<table class="table">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Клиент</th>
-            <th>Адрес</th>
-            <th>Телефон</th>
-            <th>Имя пользователя</th>
-            <th>Действие</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for client in clients %}
-        <tr>
-            <td>{{ client.id }}</td>
-            <td>{{ client.full_name }}</td>
-            <td>{{ client.address }}</td>
-            <td>{{ client.telephone }}</td>
-            <td>{{ client.login }}</td>
-            <td>
-                <a href="{{ url_for('admin.edit_client', id=client.id) }}" class="btn btn-warning btn-sm">Изменить</a>
-                <a href="{{ url_for('admin.delete_client', id=client.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Вы точно хотите удалить клиента?');">Удалить</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
 {% endblock %}

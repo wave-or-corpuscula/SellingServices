@@ -17,7 +17,9 @@ def create_app(config=Config):
 
     @app.template_filter()
     def kravchuk_date_format(date_value: date):
-        return date_value.strftime("%d.%m.%Y")
+        if date_value:
+            return date_value.strftime("%d.%m.%Y")
+        return date_value
 
     db.init_app(app)
     

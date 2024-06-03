@@ -1,11 +1,6 @@
-{% extends "dashboard_base.html" %}
+{% extends "employee/dashboard_employee_base.html" %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2 class="mb-4">Панель инструментов сотрудника</h2>
-    <div class="list-group">
-        <a href="{{ url_for('employees.view_requests') }}" class="btn btn-primary btn-block mb-3">Просмотр заявок</a>
-        <a href="{{ url_for('employees.employee_orders') }}" class="btn btn-primary btn-block mb-3">Просмотр заказов</a>
-    </div>
-</div>
+<h2>Панель сотрудника</h2>
+Здесь сотрудники могут связывать с клиентами для уточнения деталей заказа
 {% endblock %}

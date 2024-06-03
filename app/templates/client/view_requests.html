@@ -1,9 +1,11 @@
-{% extends "dashboard_base.html" %}
+{% extends "client/dashboard_client_base.html" %}
+
+{% block title %}Просмотр заявок{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
     <h2>Ваши заявки</h2>
-    <table class="table">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>#</th>

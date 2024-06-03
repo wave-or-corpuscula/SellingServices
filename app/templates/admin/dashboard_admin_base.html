@@ -1,0 +1,58 @@
+{% extends "dashboard_base.html" %}
+
+{% block title %}Панель администратора{% endblock %}
+
+{% block header %}
+<div class="header-content">
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <h1 style="display: inline-block;">Панель администратора</h1>
+    <h4 style="display: inline-block;margin: auto 20px auto auto;"><a href="{{ url_for('users.logout') }}" class="btn btn-secondary">Выход</a></h4>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<nav>
+    <ul>
+        <li>
+            <a href="{{ url_for('admin.admin_dashboard') }}">Главная</a>
+        </li>
+        <li>
+            <a href="{{ url_for('admin.manage_clients') }}">Клиенты</a>
+        </li>
+        <li >
+            <a href="{{ url_for('admin.manage_employees') }}">Сотрудники</a>
+        </li>
+        <li >
+            <a href="{{ url_for('admin.manage_services') }}">Услуги</a>
+        </li>
+        <li >
+            <a href="{{ url_for('admin.manage_service_objects') }}">Объекты услуг</a>
+        </li>
+        {# <li >
+            <a href="{{ url_for('admin.manage_storehouse') }}">Склад</a>
+        </li> #}
+        <li >
+            <a href="{{ url_for('admin.manage_order_statuses') }}">Статусы заказов</a>
+        </li>
+        <li >
+            <a href="{{ url_for('admin.manage_posts') }}">Должности</a>
+        </li>
+        <li >
+            <a href="{{ url_for('admin.manage_categories') }}">Категории</a>
+        </li>
+        <li >
+            <a href="{{ url_for('admin.manage_subcategories') }}">Подкатегории</a>
+        </li>
+        <li >
+            <a href="{{ url_for('admin.manage_objectscategories') }}">Категории объектов</a>
+        </li>
+        <div class="m-3">
+            <a href="{{ url_for('admin.services_rating') }}" class="btn btn-outline-primary btn-block mb-3">Рейтинг услуг</a>        
+        </div>
+        <div class="m-3">
+            <a href="{{ url_for('admin.employees_stat') }}" class="btn btn-outline-primary btn-block mb-3">Статистика сотрудников</a>
+        </div>
+    </ul>
+</nav>
+<script src="{{ url_for('static', filename='js/search.js') }}"></script>
+{% endblock %}

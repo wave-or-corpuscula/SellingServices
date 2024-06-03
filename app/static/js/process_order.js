@@ -352,6 +352,8 @@ function collectAllObjectsData() {
         objects: []
     }
 
+    console.log(orderInfo.deliveryDate);
+
     // const orderedObjectsList = [];
     serviceObjectsItems.forEach(serviceObjectsItem => {
         orderInfo.objects.push({

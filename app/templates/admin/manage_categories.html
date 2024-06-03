@@ -1,44 +1,46 @@
-{% extends "admin/base_admin.html" %}
+{% extends 'admin/dashboard_admin_base.html' %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-8">
-        <h2>Категории</h2>
-        <div class="mb-3">
-            <label for="searchInput" class="form-label">Поиск:</label>
-            <input type="text" id="searchInput" class="form-control" placeholder="Введите для поиска...">
-        </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Название категории</th>
-                    <th>Действия</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for category in categories %}
-                <tr>
-                    <td>{{ category.id }}</td>
-                    <td>{{ category.cat_name }}</td>
-                    <td>
-                        <a href="{{ url_for('admin.edit_category', category_id=category.id) }}" class="btn btn-primary btn-sm">Изменить</a>
-                        <a href="{{ url_for('admin.delete_category', category_id=category.id) }}" class="btn btn-danger btn-sm">Удалить</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <div class="col-md-4">
-        <h2>Добавить категорию</h2>
-        <form action="{{ url_for('admin.add_category') }}" method="POST">
-            <div class="form-group">
-                <label for="cat_name">Название категории</label>
-                <input type="text" class="form-control" id="cat_name" name="cat_name" required>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <h2>Категории</h2>
+            <div class="mb-3">
+                <label for="searchInput" class="form-label">Поиск:</label>
+                <input type="text" id="searchInput" class="form-control" placeholder="Введите для поиска...">
             </div>
-            <button type="submit" class="btn btn-success">Добавить категорию</button>
-        </form>
-    </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Название категории</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                    <tr>
+                        <td>{{ category.id }}</td>
+                        <td>{{ category.cat_name }}</td>
+                        <td>
+                            <a href="{{ url_for('admin.edit_category', category_id=category.id) }}" class="btn btn-primary btn-sm">Изменить</a>
+                            <a href="{{ url_for('admin.delete_category', category_id=category.id) }}" class="btn btn-danger btn-sm">Удалить</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-4">
+            <h2>Добавить категорию</h2>
+            <form action="{{ url_for('admin.add_category') }}" method="POST">
+                <div class="form-group">
+                    <label for="cat_name">Название категории</label>
+                    <input type="text" class="form-control" id="cat_name" name="cat_name" required>
+                </div>
+                <button type="submit" class="btn btn-success">Добавить категорию</button>
+            </form>
+        </div>
+    </div>    
 </div>
 {% endblock %}

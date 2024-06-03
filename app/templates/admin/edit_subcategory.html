@@ -1,4 +1,4 @@
-{% extends 'admin/base_admin.html' %}
+{% extends 'admin/dashboard_admin_base.html' %}
 
 {% block content %}
 <div class="container mt-4">
@@ -20,8 +20,8 @@
             <label for="subcat_cost">Стоимость подкатегории</label>
             <input type="text" class="form-control" id="subcat_cost" name="subcat_cost" value="{{ subcategory.cost }}" required>
         </div>
-    </div>
         <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+    </div>
     </form>
 </div>
 {% endblock %}
